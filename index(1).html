@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Paw Pack">
+<title>Paw Pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#FAFAF8;--surface:#FFFFFF;--surface2:#F4F2EE;
+  --text:#1C1C1A;--text2:#6B6B67;--text3:#A8A8A4;
+  --border:#E8E6E0;--border2:#D4D2CC;
+  --accent:#C17B3F;--accent-bg:#FBF4EC;--accent-text:#8B5020;
+  --green:#2D7A5A;--green-bg:#EBF7F1;--green-text:#1A5C3F;
+  --blue:#2B6CB0;--blue-bg:#EBF3FB;--blue-text:#1A4A82;
+  --pink:#C0476E;--pink-bg:#FCEEF3;--pink-text:#8B2A4E;
+  --red:#C0392B;--red-bg:#FDEEEC;--red-text:#8B2015;
+  --warn-bg:#FEF9EC;--warn-border:#F0D080;--warn-text:#8B6A10;
+  --radius:14px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.5}
+
+.app{max-width:480px;margin:0 auto;padding:0 0 80px;min-height:100vh}
+
+/* Header */
+.header{padding:20px 16px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
+.header-left h1{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:var(--text);letter-spacing:-0.3px}
+.header-left p{font-size:12px;color:var(--text3);margin-top:1px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.3s}
+.sync-dot.synced{background:var(--green)}
+.sync-dot.syncing{background:var(--accent);animation:pulse 1s infinite}
+.sync-dot.error{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* Dog tabs */
+.dog-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px}
+.dog-tab{padding:10px 4px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--surface);cursor:pointer;text-align:center;transition:all 0.15s;box-shadow:var(--shadow)}
+.dog-tab .av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:12px;margin:0 auto 5px;transition:all 0.15s}
+.dog-tab .dn{font-size:11px;color:var(--text2);font-weight:500}
+.dog-tab[data-i="0"] .av{background:var(--accent-bg);color:var(--accent-text)}
+.dog-tab[data-i="1"] .av{background:var(--green-bg);color:var(--green-text)}
+.dog-tab[data-i="2"] .av{background:var(--blue-bg);color:var(--blue-text)}
+.dog-tab[data-i="3"] .av{background:var(--pink-bg);color:var(--pink-text)}
+.dog-tab[data-i="0"].active{border-color:var(--accent);background:var(--accent-bg)}
+.dog-tab[data-i="1"].active{border-color:var(--green);background:var(--green-bg)}
+.dog-tab[data-i="2"].active{border-color:var(--blue);background:var(--blue-bg)}
+.dog-tab[data-i="3"].active{border-color:var(--pink);background:var(--pink-bg)}
+.dog-tab.active .dn{color:var(--text)}
+
+/* Alerts */
+.alerts{padding:0 16px 4px}
+.alert{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:13px;color:var(--warn-text)}
+.alert strong{font-weight:500}
+
+/* Nav tabs */
+.nav-tabs{display:flex;gap:4px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--text2);white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.15s;flex-shrink:0}
+.nav-btn.active{background:var(--text);border-color:var(--text);color:#fff;font-weight:500}
+
+/* Content */
+.content{padding:0 16px}
+
+/* Quick log grid */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.quick-card{padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);cursor:pointer;text-align:left;box-shadow:var(--shadow);transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.quick-card:active{transform:scale(0.97)}
+.quick-card .qi{font-size:22px;display:block;margin-bottom:6px}
+.quick-card .ql{font-size:14px;font-weight:500;color:var(--text)}
+.quick-card .qs{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* Section card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:500;color:var(--text)}
+.add-btn{font-size:12px;padding:5px 12px;border:1px solid var(--border2);border-radius:20px;background:transparent;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif}
+.add-btn:active{background:var(--surface2)}
+
+/* Log items */
+.log-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);position:relative}
+.log-item:last-child{border-bottom:none;padding-bottom:0}
+.dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.log-body{flex:1;min-width:0;padding-right:72px}
+.log-label{font-size:13px;color:var(--text);font-weight:500}
+.log-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.log-note{font-size:12px;color:var(--text3);font-style:italic;margin-top:2px}
+.log-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-top:4px}
+.item-actions{position:absolute;right:0;top:8px;display:flex;gap:4px;opacity:0;transition:opacity 0.15s}
+.log-item:hover .item-actions,.log-item.touched .item-actions{opacity:1}
+.act{padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);font-family:'DM Sans',sans-serif}
+.act.del:active,.act.del:hover{background:var(--red-bg);color:var(--red-text);border-color:var(--red)}
+.act:active,.act:hover{background:var(--surface2)}
+
+/* Progress */
+.med-active{border-left:3px solid var(--accent);padding-left:8px}
+.prog-bar{height:4px;background:var(--border);border-radius:2px;margin-top:5px}
+.prog-fill{height:4px;border-radius:2px;transition:width 0.4s}
+
+.empty{font-size:13px;color:var(--text3);text-align:center;padding:16px 0}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.modal{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px 40px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px}
+.modal h2{font-size:17px;font-weight:500;margin-bottom:16px;color:var(--text)}
+.modal label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;margin-top:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
+.modal input,.modal select,.modal textarea{width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--accent)}
+.modal textarea{resize:vertical;min-height:70px}
+.modal-footer{display:flex;gap:8px;margin-top:20px}
+.btn-cancel{flex:1;padding:12px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:14px;color:var(--text2);font-family:'DM Sans',sans-serif}
+.btn-save{flex:2;padding:12px;border:none;border-radius:var(--radius-sm);background:var(--text);cursor:pointer;font-size:14px;color:#fff;font-weight:500;font-family:'DM Sans',sans-serif}
+.btn-save:active{opacity:0.85}
+.dog-pick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+.dog-pick{padding:9px;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer;text-align:center;font-size:13px;background:var(--surface);color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.12s}
+.dog-pick.picked{background:var(--green-bg);border-color:var(--green);color:var(--green-text);font-weight:500}
+.freq-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* Confirm */
+.confirm-box{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px 40px;width:100%;max-width:480px}
+.confirm-box p{font-size:15px;color:var(--text);margin-bottom:6px;font-weight:500}
+.confirm-box small{font-size:13px;color:var(--text2)}
+.confirm-footer{display:flex;gap:8px;margin-top:20px}
+.btn-del{flex:1;padding:12px;border:none;border-radius:var(--radius-sm);background:var(--red);cursor:pointer;font-size:14px;color:#fff;font-weight:500;font-family:'DM Sans',sans-serif}
+
+/* Loading */
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;gap:12px}
+.loading-screen h2{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;color:var(--text)}
+.loading-screen p{font-size:13px;color:var(--text3)}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(min-width:480px){
+  .overlay,.modal,.confirm-box{border-radius:var(--radius)}
+  .overlay{align-items:center;padding:1rem}
+  .modal,.confirm-box{border-radius:var(--radius)}
+}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loading">
+  <h2>Paw Pack</h2>
+  <div class="spinner"></div>
+  <p>Loading your pack...</p>
+</div>
+
+<div class="app" id="app" style="display:none">
+  <div class="header">
+    <div class="header-left">
+      <h1>Paw Pack</h1>
+      <p id="hdate"></p>
+    </div>
+    <div class="sync-dot" id="sync-dot" title="Sync status"></div>
+  </div>
+  <div class="dog-tabs" id="dog-tabs"></div>
+  <div class="alerts" id="alerts"></div>
+  <div class="nav-tabs">
+    <button class="nav-btn active" onclick="switchView('log')">Overview</button>
+    <button class="nav-btn" onclick="switchView('feed')">Feeding</button>
+    <button class="nav-btn" onclick="switchView('med')">Meds</button>
+    <button class="nav-btn" onclick="switchView('groom')">Grooming</button>
+    <button class="nav-btn" onclick="switchView('vet')">Vet</button>
+  </div>
+  <div class="content">
+    <div id="view-log"></div>
+    <div id="view-feed" style="display:none"></div>
+    <div id="view-med" style="display:none"></div>
+    <div id="view-groom" style="display:none"></div>
+    <div id="view-vet" style="display:none"></div>
+  </div>
+</div>
+
+<div id="modal" style="display:none" class="overlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="modal-title"></h2>
+    <div id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirm" style="display:none" class="overlay">
+  <div class="confirm-box">
+    <div class="modal-handle"></div>
+    <p>Delete this entry?</p>
+    <small>This cannot be undone.</small>
+    <div class="confirm-footer">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-del" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://ffxgxhuemkcekbstkiwn.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmeGd4aHVlbWtjZWtic3RraXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODY5MjIsImV4cCI6MjA5MDA2MjkyMn0.q4zX3NheBQmKka7FaKuTeAGGoMiMPb5y9oqRG8DIKO0';
+const API=`${SUPABASE_URL}/rest/v1/entries`;
+const HEADERS={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`};
+
+const DOGS=[
+  {name:'Canelita',short:'Ca'},
+  {name:'Cookie',short:'Co'},
+  {name:'Mocca',short:'Mo'},
+  {name:'Coco',short:'Cc'}
+];
+const FREQ={
+  '1xday':'Once daily','2xday':'Twice daily','3xday':'3x daily',
+  '4xday':'4x daily','every_other':'Every other day','weekly':'Weekly','as_needed':'As needed'
+};
+const META={
+  feed:{label:'Feeding',dot:'#2D7A5A',icon:'🍽'},
+  med:{label:'Medication',dot:'#C17B3F',icon:'💊'},
+  groom:{label:'Grooming',dot:'#2B6CB0',icon:'🛁'},
+  vet:{label:'Vet visit',dot:'#C0476E',icon:'🩺'}
+};
+const FIELDS={
+  feed:['amount','notes'],
+  med:['med_name','dose','frequency','start_date','duration_days','notes'],
+  groom:['groom_type','notes'],
+  vet:['visit_date','reason','vet_name','notes']
+};
+
+let S={activeDog:0,activeView:'log',modalType:null,modalDogs:[0],editId:null,pendingDel:null,entries:[]};
+
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function fmtDate(iso){
+  const d=new Date(iso),now=new Date(),diff=Math.floor((now-d)/60000);
+  if(diff<2)return'just now';if(diff<60)return diff+'m ago';
+  if(diff<1440)return Math.floor(diff/60)+'h ago';if(diff<2880)return'yesterday';
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function fmtDs(iso){if(!iso)return'';return new Date(iso+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/(1000*60*60*24))}
+
+function setSyncDot(s){
+  const d=document.getElementById('sync-dot');
+  d.className='sync-dot'+{synced:' synced',syncing:' syncing',error:' error'}[s]||'';
+}
+
+async function loadFromSupabase(){
+  setSyncDot('syncing');
+  try{
+    const r=await fetch(API+'?order=ts.desc&limit=500',{headers:{...HEADERS,'Prefer':'return=representation'}});
+    if(!r.ok)throw new Error();
+    S.entries=await r.json();
+    localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
+    setSyncDot('synced');
+  }catch(e){
+    const cached=localStorage.getItem('pawpack_entries');
+    if(cached)S.entries=JSON.parse(cached);
+    setSyncDot('error');
+  }
+}
+
+async function pushEntry(entry){
+  setSyncDot('syncing');
+  try{
+    await fetch(API,{method:'POST',headers:{...HEADERS,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(entry)});
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
+}
+
+async function updateEntry(entry){
+  setSyncDot('syncing');
+  try{
+    await fetch(API+`?id=eq.${entry.id}`,{method:'PATCH',headers:{...HEADERS,'Prefer':'return=representation'},body:JSON.stringify({dogs:entry.dogs,data:entry.data})});
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
+}
+
+async function deleteEntry(id){
+  setSyncDot('syncing');
+  try{
+    await fetch(API+`?id=eq.${id}`,{method:'DELETE',headers:HEADERS});
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
+}
+
+function getMedStatus(e){
+  if(!e.data.start_date||!e.data.duration_days)return null;
+  const start=new Date(e.data.start_date+'T00:00:00');
+  const dur=parseInt(e.data.duration_days);
+  const end=new Date(start);end.setDate(end.getDate()+dur-1);
+  const today=new Date();today.setHours(0,0,0,0);
+  const elapsed=Math.min(Math.max(0,daysBetween(e.data.start_date,todayISO())),dur);
+  const pct=Math.min(Math.round((elapsed/dur)*100),100);
+  const daysLeft=Math.max(0,daysBetween(todayISO(),end.toISOString().slice(0,10)));
+  return{active:today<=end&&today>=start,pct,daysLeft,endDate:end.toISOString().slice(0,10)};
+}
+
+function entryLabel(type,data){
+  if(type==='feed')return data.amount||'Feeding logged';
+  if(type==='med')return(data.med_name||'Medication')+(data.dose?' · '+data.dose:'');
+  if(type==='groom')return data.groom_type||'Grooming';
+  if(type==='vet')return data.reason||'Vet visit';
+}
+
+function actionBtns(id){
+  return`<div class="item-actions">
+    <button class="act" onclick="openModal(null,${id})">Edit</button>
+    <button class="act del" onclick="askDel(${id})">Delete</button>
+  </div>`;
+}
+
+function renderMedItem(e){
+  const st=getMedStatus(e);
+  const fl=FREQ[e.data.frequency]||e.data.frequency||'';
+  const dn=e.dogs.length>1?e.dogs.map(i=>DOGS[i].name).join(', '):'';
+  let stHtml='';
+  if(st){
+    const col=st.active?(st.daysLeft<=1?'var(--accent)':'var(--green)'):'#aaa';
+    const stTxt=st.active?(st.daysLeft===0?'Last day today':`${st.daysLeft} days left — ends ${fmtDs(st.endDate)}`):`Completed ${fmtDs(st.endDate)}`;
+    stHtml=`<div class="log-meta" style="margin-top:3px">${stTxt}</div>
+    <div class="prog-bar"><div class="prog-fill" style="width:${st.pct}%;background:${col}"></div></div>`;
+  }
+  return`<div class="log-item${st&&st.active?' med-active':''}">
+    <div class="dot" style="background:var(--accent);margin-top:5px"></div>
+    <div class="log-body">
+      <div class="log-label">${entryLabel('med',e.data)}</div>
+      <div class="log-meta">${fl}${e.data.start_date?' · Started '+fmtDs(e.data.start_date):''}${dn?' · '+dn:''}</div>
+      ${stHtml}
+      ${e.data.notes?`<div class="log-note">${e.data.notes}</div>`:''}
+    </div>
+    ${actionBtns(e.id)}
+  </div>`;
+}
+
+function renderItems(type){
+  const items=S.entries.filter(e=>e.type===type&&e.dogs.includes(S.activeDog)).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+  if(!items.length)return`<div class="empty">No ${META[type].label.toLowerCase()} entries yet</div>`;
+  if(type==='med')return items.slice(0,15).map(renderMedItem).join('');
+  return items.slice(0,15).map(e=>{
+    const dn=e.dogs.length>1?e.dogs.map(i=>DOGS[i].name).join(', '):'';
+    const vd=type==='vet'&&e.data.visit_date?`<span class="log-badge" style="background:var(--blue-bg);color:var(--blue-text)">${fmtDs(e.data.visit_date)}</span>`:'';
+    return`<div class="log-item">
+      <div class="dot" style="background:${META[type].dot};margin-top:5px"></div>
+      <div class="log-body">
+        <div class="log-label">${entryLabel(type,e.data)}</div>
+        ${vd}
+        <div class="log-meta">${fmtDate(e.ts)}${dn?' · '+dn:''}</div>
+        ${type==='vet'&&e.data.vet_name?`<div class="log-meta">Vet: ${e.data.vet_name}</div>`:''}
+        ${e.data.notes?`<div class="log-note">${e.data.notes}</div>`:''}
+      </div>
+      ${actionBtns(e.id)}
+    </div>`;
+  }).join('');
+}
+
+function renderAlerts(){
+  const el=document.getElementById('alerts');
+  const html=S.entries.filter(e=>e.type==='med').map(e=>{
+    const st=getMedStatus(e);if(!st||!st.active)return'';
+    const dn=e.dogs.map(i=>DOGS[i].name).join(', ');
+    const fl=FREQ[e.data.frequency]||'';
+    const txt=st.daysLeft===0?'Last day today':`${st.daysLeft} day${st.daysLeft===1?'':'s'} left`;
+    return`<div class="alert"><strong>${e.data.med_name}</strong> for ${dn} — ${txt}. ${fl}</div>`;
+  }).join('');
+  el.innerHTML=html;
+}
+
+function renderDogTabs(){
+  document.getElementById('dog-tabs').innerHTML=DOGS.map((d,i)=>`
+    <div class="dog-tab${S.activeDog===i?' active':''}" data-i="${i}" onclick="selDog(${i})">
+      <div class="av">${d.short}</div>
+      <div class="dn">${d.name}</div>
+    </div>`).join('');
+}
+
+function renderView(){
+  const dog=DOGS[S.activeDog];
+  if(S.activeView==='log'){
+    const recent=S.entries.filter(e=>e.dogs.includes(S.activeDog)).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,8);
+    const recentHtml=recent.length?recent.map(e=>`<div class="log-item">
+      <div class="dot" style="background:${META[e.type].dot};margin-top:5px"></div>
+      <div class="log-body">
+        <div class="log-label">${entryLabel(e.type,e.data)}</div>
+        <div class="log-meta">${META[e.type].label} · ${fmtDate(e.ts)}</div>
+      </div>
+      ${actionBtns(e.id)}
+    </div>`).join(''):`<div class="empty">No events yet for ${dog.name}</div>`;
+    document.getElementById('view-log').innerHTML=`
+      <div class="quick-grid">
+        ${Object.entries(META).map(([k,m])=>`<button class="quick-card" onclick="openModal('${k}',null)">
+          <span class="qi">${m.icon}</span>
+          <div class="ql">${m.label}</div>
+          <div class="qs">Tap to log</div>
+        </button>`).join('')}
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent · ${dog.name}</span></div>
+        ${recentHtml}
+      </div>`;
+  } else {
+    const t=S.activeView;
+    document.getElementById('view-'+t).innerHTML=`<div class="card">
+      <div class="card-header">
+        <span class="card-title">${META[t].label} · ${dog.name}</span>
+        <button class="add-btn" onclick="openModal('${t}',null)">+ Add</button>
+      </div>
+      ${renderItems(t)}
+    </div>`;
+  }
+}
+
+function renderAll(){renderDogTabs();renderAlerts();renderView()}
+function selDog(i){S.activeDog=i;S.modalDogs=[i];renderAll()}
+
+function switchView(v){
+  S.activeView=v;
+  ['log','feed','med','groom','vet'].forEach(x=>document.getElementById('view-'+x).style.display=x===v?'block':'none');
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['log','feed','med','groom','vet'][i]===v));
+  renderView();
+}
+
+function buildBody(type,ex){
+  const d=ex?ex.data:{};
+  const dogs=ex?ex.dogs:[S.activeDog];
+  S.modalDogs=[...dogs];
+  const dp=DOGS.map((dog,i)=>`<div class="dog-pick${S.modalDogs.includes(i)?' picked':''}" id="dp-${i}" onclick="togDog(${i})">${dog.name}</div>`).join('');
+  const ds=`<label>Dog(s)</label><div class="dog-pick-grid">${dp}</div>`;
+  if(type==='feed')return ds+`
+    <label>Amount / food</label><input id="mf-amount" type="text" value="${d.amount||''}" placeholder="e.g. 1 cup kibble">
+    <label>Notes</label><textarea id="mf-notes" placeholder="Ate well? Left some?">${d.notes||''}</textarea>`;
+  if(type==='med'){
+    const fo=Object.entries(FREQ).map(([v,l])=>`<option value="${v}"${d.frequency===v?' selected':''}>${l}</option>`).join('');
+    return ds+`
+      <label>Medication name</label><input id="mf-med_name" type="text" value="${d.med_name||''}" placeholder="e.g. Eye drops">
+      <label>Dose</label><input id="mf-dose" type="text" value="${d.dose||''}" placeholder="e.g. 1 drop, 1 tablet">
+      <label>Frequency</label><select id="mf-frequency"><option value="">Select frequency</option>${fo}</select>
+      <div class="freq-row" style="margin-top:12px">
+        <div><label style="margin-top:0">Start date</label><input id="mf-start_date" type="date" value="${d.start_date||todayISO()}"></div>
+        <div><label style="margin-top:0">Duration (days)</label><input id="mf-duration_days" type="number" min="1" value="${d.duration_days||''}" placeholder="e.g. 7"></div>
+      </div>
+      <label>Notes</label><textarea id="mf-notes" placeholder="Additional instructions">${d.notes||''}</textarea>`;
+  }
+  if(type==='groom'){
+    const go=['Bath','Anal glands','Nail trim','Brush','Other'].map(o=>`<option${d.groom_type===o?' selected':''}>${o}</option>`).join('');
+    return ds+`
+      <label>Type</label><select id="mf-groom_type"><option value="">Select type</option>${go}</select>
+      <label>Notes</label><textarea id="mf-notes" placeholder="Any observations?">${d.notes||''}</textarea>`;
+  }
+  if(type==='vet')return ds+`
+    <label>Visit date</label><input id="mf-visit_date" type="date" value="${d.visit_date||todayISO()}">
+    <label>Reason / diagnosis</label><input id="mf-reason" type="text" value="${d.reason||''}" placeholder="e.g. Annual checkup">
+    <label>Vet name</label><input id="mf-vet_name" type="text" value="${d.vet_name||''}">
+    <label>Notes / treatment</label><textarea id="mf-notes" placeholder="Treatment, follow-up?">${d.notes||''}</textarea>`;
+  return ds;
+}
+
+function openModal(type,editId){
+  let ex=null;
+  if(editId!==null&&editId!==undefined){ex=S.entries.find(e=>e.id===editId);if(!ex)return;type=ex.type;}
+  S.modalType=type;S.editId=editId??null;
+  document.getElementById('modal-title').textContent=(S.editId!==null?'Edit ':'Log ')+META[type].label;
+  document.getElementById('modal-body').innerHTML=buildBody(type,ex);
+  document.getElementById('modal').style.display='flex';
+}
+
+function togDog(i){
+  const idx=S.modalDogs.indexOf(i);
+  if(idx>-1){if(S.modalDogs.length>1)S.modalDogs.splice(idx,1);}
+  else S.modalDogs.push(i);
+  DOGS.forEach((_,j)=>{const el=document.getElementById('dp-'+j);if(el)el.classList.toggle('picked',S.modalDogs.includes(j));});
+}
+
+function closeModal(){document.getElementById('modal').style.display='none';S.editId=null}
+
+async function saveEntry(){
+  const type=S.modalType;
+  const data={};
+  (FIELDS[type]||[]).forEach(f=>{const el=document.getElementById('mf-'+f);if(el)data[f]=el.value;});
+  closeModal();
+  if(S.editId!==null){
+    const idx=S.entries.findIndex(e=>e.id===S.editId);
+    if(idx>-1){S.entries[idx].data=data;S.entries[idx].dogs=[...S.modalDogs];await updateEntry(S.entries[idx]);}
+  } else {
+    const entry={id:Date.now(),type,dogs:[...S.modalDogs],ts:new Date().toISOString(),data};
+    S.entries.unshift(entry);
+    await pushEntry(entry);
+  }
+  localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
+  renderAll();
+}
+
+function askDel(id){S.pendingDel=id;document.getElementById('confirm').style.display='flex'}
+function closeConfirm(){S.pendingDel=null;document.getElementById('confirm').style.display='none'}
+async function confirmDelete(){
+  const id=S.pendingDel;
+  S.entries=S.entries.filter(e=>e.id!==id);
+  closeConfirm();
+  localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
+  await deleteEntry(id);
+  renderAll();
+}
+
+document.getElementById('hdate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+(async()=>{
+  await loadFromSupabase();
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='block';
+  renderAll();
+})();
+</script>
+</body>
+</html>
