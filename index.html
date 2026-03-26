@@ -24,86 +24,60 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.5}
 .app{max-width:480px;margin:0 auto;padding:0 0 80px;min-height:100vh}
-
-/* Header */
 .header{padding:16px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
 .header h1{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;color:var(--text)}
 .header-right{display:flex;align-items:center;gap:10px}
-.lang-toggle{font-size:12px;padding:4px 10px;border:1px solid var(--border2);border-radius:20px;background:transparent;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.3s;flex-shrink:0}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background 0.3s}
 .sync-dot.synced{background:var(--green)}
 .sync-dot.syncing{background:var(--accent);animation:pulse 1s infinite}
 .sync-dot.error{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-
-/* Bottom nav */
+@keyframes fadeOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(0.97)}}
+.task-fading{animation:fadeOut 0.5s ease forwards}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 20px;z-index:20;max-width:480px;margin:0 auto}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 16px;border:none;background:transparent;font-family:'DM Sans',sans-serif}
 .nav-item .ni{font-size:20px}
 .nav-item .nl{font-size:10px;color:var(--text3)}
 .nav-item.active .nl{color:var(--accent);font-weight:500}
-
-/* Home page */
-.home-pun{background:var(--accent-bg);border:1px solid var(--warn-border);border-radius:var(--radius);padding:18px;margin:14px 16px 10px;text-align:center;position:relative}
-.home-pun .pun-text{font-family:'DM Serif Display',serif;font-size:18px;color:var(--accent-text);line-height:1.4}
-.home-pun .pun-sub{font-size:12px;color:var(--accent);margin-top:6px}
-.pun-refresh{position:absolute;top:10px;right:12px;font-size:16px;cursor:pointer;background:none;border:none;color:var(--accent)}
-
+.home-pun{background:var(--accent-bg);border:1px solid var(--warn-border);border-radius:var(--radius);padding:18px 18px 14px;margin:14px 16px 6px;text-align:center}
+.pun-text{font-family:'DM Serif Display',serif;font-size:17px;color:var(--accent-text);line-height:1.45}
+.pun-refresh{margin-top:10px;font-size:12px;padding:5px 14px;border:1px solid var(--warn-border);border-radius:20px;background:transparent;cursor:pointer;color:var(--accent);font-family:'DM Sans',sans-serif}
 .home-section{padding:0 16px;margin-bottom:14px}
 .home-section-title{font-size:13px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-
-/* Today tasks */
-.task-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:all 0.15s}
-.task-item.done{opacity:0.6;background:var(--surface2)}
-.task-item.done .task-label{text-decoration:line-through;color:var(--text3)}
-.task-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+.task-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:opacity 0.3s}
+.task-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all 0.2s}
 .task-item.done .task-check{background:var(--green);border-color:var(--green);color:#fff}
-.task-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.task-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
 .task-label{flex:1;font-size:13px;color:var(--text)}
-.task-meta{font-size:11px;color:var(--text3)}
-.overdue-badge{font-size:11px;padding:2px 7px;border-radius:4px;background:var(--red-bg);color:var(--red-text);flex-shrink:0}
-
-/* Dog grid on home */
-.dog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px}
+.task-meta{font-size:11px;color:var(--text3);margin-top:1px}
+.dog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 14px}
 .dog-card{padding:12px 6px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);cursor:pointer;text-align:center;box-shadow:var(--shadow);transition:all 0.15s}
 .dog-card:active{transform:scale(0.96)}
-.dog-card .av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;margin:0 auto 6px}
+.dog-card .av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;margin:0 auto 5px}
 .dog-card .dn{font-size:11px;color:var(--text2);font-weight:500}
-.dog-card .ds{font-size:10px;color:var(--text3);margin-top:2px}
-.dog-card[data-i="0"] .av{background:var(--accent-bg);color:var(--accent-text)}
-.dog-card[data-i="1"] .av{background:var(--green-bg);color:var(--green-text)}
-.dog-card[data-i="2"] .av{background:var(--blue-bg);color:var(--blue-text)}
-.dog-card[data-i="3"] .av{background:var(--pink-bg);color:var(--pink-text)}
-
-/* Dog profile */
-.profile-header{display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);border-bottom:1px solid var(--border);margin-bottom:2px}
-.profile-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:18px}
-.profile-name{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400}
-.profile-sub{font-size:13px;color:var(--text2)}
-.back-btn{padding:6px 12px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:13px;color:var(--text2);font-family:'DM Sans',sans-serif;margin:12px 16px 0;display:inline-block}
-
-/* Profile tabs */
+.dog-card .ds{font-size:10px;color:var(--text3);margin-top:1px}
+.profile-header{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
+.profile-av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:17px}
+.profile-name{font-family:'DM Serif Display',serif;font-size:21px;font-weight:400}
+.profile-sub{font-size:12px;color:var(--text2)}
+.back-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:13px;color:var(--text2);font-family:'DM Sans',sans-serif;margin:12px 16px 0;display:inline-block}
 .profile-tabs{display:flex;gap:4px;padding:12px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .profile-tabs::-webkit-scrollbar{display:none}
 .ptab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:13px;color:var(--text2);white-space:nowrap;font-family:'DM Sans',sans-serif;flex-shrink:0}
 .ptab.active{background:var(--text);border-color:var(--text);color:#fff;font-weight:500}
-
-/* Cards */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:0 16px 12px;box-shadow:var(--shadow)}
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .card-title{font-size:14px;font-weight:500;color:var(--text)}
 .add-btn{font-size:12px;padding:5px 12px;border:1px solid var(--border2);border-radius:20px;background:transparent;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif}
-
-/* Log items */
 .log-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);position:relative}
 .log-item:last-child{border-bottom:none;padding-bottom:0}
 .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.log-body{flex:1;min-width:0;padding-right:76px}
+.log-body{flex:1;min-width:0;padding-right:80px}
 .log-label{font-size:13px;color:var(--text);font-weight:500}
 .log-meta{font-size:12px;color:var(--text2);margin-top:2px}
 .log-note{font-size:12px;color:var(--text3);font-style:italic;margin-top:2px}
 .item-actions{position:absolute;right:0;top:8px;display:flex;gap:4px;opacity:0;transition:opacity 0.15s}
-.log-item:hover .item-actions,.log-item.touched .item-actions{opacity:1}
+.log-item:hover .item-actions{opacity:1}
 .act{padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;color:var(--text2);font-family:'DM Sans',sans-serif}
 .act.del:hover{background:var(--red-bg);color:var(--red-text);border-color:var(--red)}
 .act:hover{background:var(--surface2)}
@@ -113,31 +87,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .empty{font-size:13px;color:var(--text3);text-align:center;padding:20px 0}
 .alert-box{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);padding:10px 14px;margin:0 16px 8px;font-size:13px;color:var(--warn-text)}
 .alert-box strong{font-weight:500}
-
-/* Calendar */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
 .cal-nav button{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:13px;color:var(--text2);font-family:'DM Sans',sans-serif}
 .cal-month{font-size:16px;font-weight:500;color:var(--text)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:0 16px 12px}
 .cal-day-name{text-align:center;font-size:11px;color:var(--text3);padding:4px 0;font-weight:500}
-.cal-day{text-align:center;padding:8px 4px;font-size:13px;border-radius:var(--radius-sm);cursor:pointer;position:relative;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cal-day{text-align:center;padding:7px 4px;font-size:13px;border-radius:var(--radius-sm);cursor:pointer;position:relative;min-height:38px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px}
 .cal-day:hover{background:var(--surface2)}
 .cal-day.today{background:var(--accent-bg);color:var(--accent-text);font-weight:500}
 .cal-day.selected{background:var(--text);color:#fff}
 .cal-day.selected.today{background:var(--accent);color:#fff}
-.cal-day.empty-day{cursor:default}
-.cal-dots{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
+.cal-dots{display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:2px}
 .cal-dot{width:5px;height:5px;border-radius:50%}
-.cal-detail{padding:0 16px;margin-bottom:12px}
+.cal-detail{padding:0 16px 12px}
 .cal-detail-title{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:8px}
-
-/* Modal */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
 .modal{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px 40px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto}
 .modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px}
 .modal h2{font-size:17px;font-weight:500;margin-bottom:16px;color:var(--text)}
-.modal label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;margin-top:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
-.modal input,.modal select,.modal textarea{width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none}
+.modal label,.settings-label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;margin-top:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
+.modal input,.modal select,.modal textarea,.settings-input,.settings-select{width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none}
 .modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--accent)}
 .modal textarea{resize:vertical;min-height:70px}
 .modal-footer{display:flex;gap:8px;margin-top:20px}
@@ -147,36 +116,49 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .dog-pick{padding:9px;border-radius:var(--radius-sm);border:1px solid var(--border);cursor:pointer;text-align:center;font-size:13px;background:var(--surface);color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.12s}
 .dog-pick.picked{background:var(--green-bg);border-color:var(--green);color:var(--green-text);font-weight:500}
 .freq-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-/* Onboarding */
-.onboard{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;padding:32px 20px 40px;max-width:480px;margin:0 auto}
-.onboard h1{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;margin-bottom:8px;color:var(--text)}
-.onboard p{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6}
-.onboard-step{margin-bottom:24px}
-.onboard-step h3{font-size:15px;font-weight:500;margin-bottom:12px;color:var(--text)}
-.dog-onboard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.dog-onboard-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.dog-onboard-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500}
-.dog-onboard-name{font-size:14px;font-weight:500;color:var(--text)}
-.onboard-field{margin-bottom:10px}
-.onboard-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
-.onboard-field select,.onboard-field input{width:100%;font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none}
-.btn-primary{width:100%;padding:14px;border:none;border-radius:var(--radius-sm);background:var(--text);cursor:pointer;font-size:15px;color:#fff;font-weight:500;font-family:'DM Sans',sans-serif;margin-top:8px}
-
-/* Confirm */
 .confirm-box{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px 40px;width:100%;max-width:480px}
 .confirm-box p{font-size:15px;color:var(--text);margin-bottom:6px;font-weight:500}
 .confirm-box small{font-size:13px;color:var(--text2)}
 .confirm-footer{display:flex;gap:8px;margin-top:20px}
 .btn-del{flex:1;padding:12px;border:none;border-radius:var(--radius-sm);background:var(--red);cursor:pointer;font-size:14px;color:#fff;font-weight:500;font-family:'DM Sans',sans-serif}
-
-/* Loading */
+.btn-primary{width:100%;padding:13px;border:none;border-radius:var(--radius-sm);background:var(--text);cursor:pointer;font-size:14px;color:#fff;font-weight:500;font-family:'DM Sans',sans-serif;margin-top:10px}
+.btn-secondary{width:100%;padding:12px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:14px;color:var(--text2);font-family:'DM Sans',sans-serif;margin-top:8px}
+.btn-danger{width:100%;padding:12px;border:1px solid var(--red);border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:14px;color:var(--red);font-family:'DM Sans',sans-serif;margin-top:8px}
 .loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:300;gap:12px}
 .loading-screen h2{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;color:var(--text)}
-.loading-screen p{font-size:13px;color:var(--text3)}
 .spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+.onboard{max-width:480px;margin:0 auto;padding:32px 20px 60px;min-height:100vh}
+.onboard-step-indicator{display:flex;gap:6px;margin-bottom:28px}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--border2)}
+.step-dot.active{background:var(--accent);width:20px;border-radius:4px}
+.onboard h1{font-family:'DM Serif Display',serif;font-size:28px;font-weight:400;margin-bottom:8px;color:var(--text)}
+.onboard p{font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.lang-option{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:10px;cursor:pointer;transition:all 0.15s}
+.lang-option.selected{border-color:var(--accent);background:var(--accent-bg)}
+.lang-option .lo-name{font-size:15px;font-weight:500;color:var(--text)}
+.lang-option .lo-sub{font-size:12px;color:var(--text2)}
+.lang-option .lo-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px}
+.lang-option.selected .lo-check{background:var(--accent);border-color:var(--accent);color:#fff}
+.dog-slot{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.dog-slot-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dog-slot-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.dog-slot-del{font-size:12px;padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;color:var(--text3);font-family:'DM Sans',sans-serif}
+.add-dog-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px dashed var(--border2);border-radius:var(--radius);background:transparent;cursor:pointer;font-size:14px;color:var(--text2);font-family:'DM Sans',sans-serif;width:100%;margin-bottom:10px}
+.sched-dog{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.sched-dog-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sched-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500}
+.settings-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:0 16px 12px}
+.settings-section-title{font-size:13px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-row-label{font-size:14px;color:var(--text)}
+.settings-row-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.settings-row-right{font-size:13px;color:var(--text2)}
+.toggle{width:44px;height:26px;border-radius:13px;background:var(--border2);position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.toggle.on{background:var(--green)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.toggle.on::after{transform:translateX(18px)}
 @media(min-width:480px){
   .bottom-nav{left:50%;transform:translateX(-50%);width:480px}
   .overlay{align-items:center;padding:1rem}
@@ -185,19 +167,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 </style>
 </head>
 <body>
-
 <div class="loading-screen" id="loading">
   <h2>Paw Pack</h2>
   <div class="spinner"></div>
 </div>
-
-<div id="onboard-screen" style="display:none"></div>
-
+<div id="onboard-screen" style="display:none;background:var(--bg);position:fixed;inset:0;overflow-y:auto;z-index:200"></div>
 <div class="app" id="app" style="display:none">
   <div class="header">
     <h1>Paw Pack</h1>
     <div class="header-right">
-      <button class="lang-toggle" onclick="toggleLang()" id="lang-btn">ES</button>
       <div class="sync-dot" id="sync-dot"></div>
     </div>
   </div>
@@ -217,56 +195,48 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </button>
   </div>
 </div>
-
 <div id="modal" style="display:none" class="overlay">
   <div class="modal">
     <div class="modal-handle"></div>
     <h2 id="modal-title"></h2>
     <div id="modal-body"></div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()" data-t="cancel">Cancel</button>
-      <button class="btn-save" onclick="saveEntry()" data-t="save">Save</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">Save</button>
     </div>
   </div>
 </div>
-
 <div id="confirm" style="display:none" class="overlay">
   <div class="confirm-box">
     <div class="modal-handle"></div>
-    <p data-t="deleteQ">Delete this entry?</p>
-    <small data-t="deleteWarn">This cannot be undone.</small>
+    <p id="confirm-title">Delete this entry?</p>
+    <small id="confirm-sub">This cannot be undone.</small>
     <div class="confirm-footer">
-      <button class="btn-cancel" onclick="closeConfirm()" data-t="cancel">Cancel</button>
-      <button class="btn-del" onclick="confirmDelete()" data-t="delete">Delete</button>
+      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-del" id="confirm-btn" onclick="confirmAction()">Delete</button>
     </div>
   </div>
 </div>
-
 <script>
 const SUPABASE_URL='https://ffxgxhuemkcekbstkiwn.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmeGd4aHVlbWtjZWtic3RraXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODY5MjIsImV4cCI6MjA5MDA2MjkyMn0.q4zX3NheBQmKka7FaKuTeAGGoMiMPb5y9oqRG8DIKO0';
 const API=`${SUPABASE_URL}/rest/v1/entries`;
-const H={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`};
+const SBH={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`};
 
-const DOGS=[
-  {name:'Canelita',short:'Ca',colorVar:'accent'},
-  {name:'Cookie',short:'Co',colorVar:'green'},
-  {name:'Mocca',short:'Mo',colorVar:'blue'},
-  {name:'Coco',short:'Cc',colorVar:'pink'}
-];
 const DOG_COLORS=['var(--accent)','var(--green)','var(--blue)','var(--pink)'];
 const DOG_BG=['var(--accent-bg)','var(--green-bg)','var(--blue-bg)','var(--pink-bg)'];
 const DOG_TEXT=['var(--accent-text)','var(--green-text)','var(--blue-text)','var(--pink-text)'];
+const DOG_BORDER=['var(--accent)','var(--green)','var(--blue)','var(--pink)'];
 
 const PUNS=[
-  {en:"Why don't dogs make good dancers? Because they have two left feet!",es:"¿Por qué los perros no bailan bien? ¡Porque tienen dos patas izquierdas!"},
-  {en:"What do you call a dog magician? A labra-cadabra-dor!",es:"¿Cómo se llama un perro mago? ¡Un labra-cadabra-dor!"},
-  {en:"What do you call a sleeping dinosaur? A dino-snore. What do you call a sleeping dog? Shhhh.",es:"¿Cuál es el colmo de un perro? ¡Que su cola lo siga a todos lados!"},
-  {en:"My dog isn't fat. He's just a little husky.",es:"Mi perro no está gordo. Solo está un poco 'peludo' de más."},
-  {en:"What kind of dog does a vampire have? A blood-hound!",es:"¿Qué tipo de perro tiene un vampiro? ¡Un sabueso de sangre!"},
   {en:"Why did the dog sit in the shade? Because he didn't want to be a hot dog!",es:"¿Por qué el perro se sentó a la sombra? ¡Porque no quería ser un perro caliente!"},
-  {en:"What do you call a dog who loves yoga? A down-ward-facing dog master.",es:"¿Cómo se llama un perro zen? ¡Un perro en postura del can!"},
-  {en:"Why do dogs run in circles? Because it's too hard to run in squares!",es:"¿Por qué los perros corren en círculos? ¡Porque correr en cuadrados es muy difícil!"}
+  {en:"What do you call a dog magician? A labra-cadabra-dor!",es:"¿Cómo se llama un perro mago? ¡Un labra-cadabra-dor!"},
+  {en:"My dog isn't fat. He's just a little husky.",es:"Mi perro no está gordo. Solo está un poco 'esponjoso'."},
+  {en:"What do you call a sleeping dog? A pup-napper!",es:"¿Cómo se llama un perro dormido? ¡Un can-sado!"},
+  {en:"Why do dogs run in circles? Because it's too hard to run in squares!",es:"¿Por qué los perros corren en círculos? ¡Porque correr en cuadrados es muy difícil!"},
+  {en:"What do you call a dog who loves yoga? A down-ward-facing dog master.",es:"¿Cómo se llama un perro zen? ¡El maestro del 'perro boca abajo'!"},
+  {en:"What kind of dog does a vampire have? A blood-hound!",es:"¿Qué tipo de perro tiene un vampiro? ¡Un sabueso de sangre!"},
+  {en:"Why don't dogs make good dancers? Because they have two left feet!",es:"¿Por qué los perros no bailan bien? ¡Porque tienen dos patas izquierdas!"}
 ];
 
 const T={
@@ -277,7 +247,7 @@ const T={
     todayTasks:"Today's Tasks",noTasks:'All done for today! 🎉',
     yourPack:'Your Pack',recentActivity:'Recent Activity',
     feeding:'Feeding',medication:'Medication',grooming:'Grooming',vet:'Vet Visit',
-    overview:'Overview',meds:'Meds',history:'History',
+    overview:'Overview',meds:'Meds',
     addFeeding:'Log Feeding',addMed:'Log Medication',addGrooming:'Log Grooming',addVet:'Log Vet Visit',
     editFeeding:'Edit Feeding',editMed:'Edit Medication',editGrooming:'Edit Grooming',editVet:'Edit Vet Visit',
     dogLabel:'Dog(s)',amountLabel:'Amount / Food',notesLabel:'Notes',
@@ -287,18 +257,24 @@ const T={
     oncedaily:'Once daily',twicedaily:'Twice daily','3xdaily':'3x daily','4xdaily':'4x daily',
     everyother:'Every other day',weekly:'Weekly',asneeded:'As needed',
     bath:'Bath',analGlands:'Anal Glands',nailTrim:'Nail Trim',brush:'Brush',other:'Other',
-    lastDay:'Last day today',daysLeft:'days left, ends',completed:'Completed',
-    started:'Started',noEntries:'No entries yet',
-    daysAgo:'days ago',yesterday:'yesterday',justNow:'just now',
-    overdue:'days since last',
-    welcomeBack:'Welcome back!',
-    mealsPerDay:'Meals per day',groomEvery:'Groom every',
-    setupTitle:'Let\'s set up your pack!',setupSub:'Tell us about your dogs\' daily routines so we can generate their daily tasks automatically.',
-    setupBtn:'Get Started',
-    settingsTitle:'Settings',scheduleFor:'Schedule for',
-    saveSettings:'Save Settings',
+    lastDay:'Last day today',daysLeft:'days left, ends',completed:'Completed',started:'Started',
+    noEntries:'No entries yet',yesterday:'yesterday',justNow:'just now',
+    overdue:'days since last',back:'Back',
+    settingsTitle:'Settings',
+    dogProfiles:'Dog Profiles',schedules:'Daily Schedules',
+    appPrefs:'App Preferences',language:'Language',
+    dataManagement:'Data Management',exportCSV:'Export data as CSV',clearData:'Clear all data',
+    clearDataQ:'Clear all data?',clearDataWarn:'This will permanently delete all logged entries. Dog profiles and schedules are kept.',
+    mealsPerDay:'Meals per day',groomEvery:'Bath — every',analEvery:'Anal glands — every',
+    saveSettings:'Save',
+    breed:'Breed',age:'Age (years)',weight:'Weight (kg)',
+    nDays:'days',nWeeks:'weeks',nMonth:'month',
+    obStep1Title:'Welcome to Paw Pack!',obStep1Sub:'First, choose your language.',
+    obStep2Title:'Add your dogs',obStep2Sub:'Add each dog in your pack. You can edit these later.',
+    obStep3Title:'Daily schedules',obStep3Sub:"Set each dog's routine so we can build their daily task list.",
+    obAddDog:'+ Add another dog',obDogName:"Dog's name",obDone:'Get started',
     selectFreq:'Select frequency',selectType:'Select type',
-    nDays:'days',nWeeks:'weeks',nMonths:'month'
+    name:'Name',
   },
   es:{
     home:'Inicio',dogs:'Perros',calendar:'Calendario',settings:'Ajustes',
@@ -307,7 +283,7 @@ const T={
     todayTasks:'Tareas de Hoy',noTasks:'¡Todo listo por hoy! 🎉',
     yourPack:'Tu Manada',recentActivity:'Actividad Reciente',
     feeding:'Alimentación',medication:'Medicamento',grooming:'Aseo',vet:'Visita al Vet',
-    overview:'Resumen',meds:'Medicamentos',history:'Historial',
+    overview:'Resumen',meds:'Meds',
     addFeeding:'Registrar Comida',addMed:'Registrar Medicamento',addGrooming:'Registrar Aseo',addVet:'Registrar Visita al Vet',
     editFeeding:'Editar Comida',editMed:'Editar Medicamento',editGrooming:'Editar Aseo',editVet:'Editar Visita al Vet',
     dogLabel:'Perro(s)',amountLabel:'Cantidad / Comida',notesLabel:'Notas',
@@ -317,18 +293,24 @@ const T={
     oncedaily:'Una vez al día',twicedaily:'Dos veces al día','3xdaily':'3 veces al día','4xdaily':'4 veces al día',
     everyother:'Día por medio',weekly:'Semanal',asneeded:'Según sea necesario',
     bath:'Baño',analGlands:'Glándulas Anales',nailTrim:'Corte de Uñas',brush:'Cepillado',other:'Otro',
-    lastDay:'Último día hoy',daysLeft:'días restantes, termina',completed:'Completado',
-    started:'Comenzó',noEntries:'Sin entradas aún',
-    daysAgo:'días atrás',yesterday:'ayer',justNow:'ahora mismo',
-    overdue:'días desde el último',
-    welcomeBack:'¡Bienvenido de vuelta!',
-    mealsPerDay:'Comidas por día',groomEvery:'Aseo cada',
-    setupTitle:'¡Configuremos tu manada!',setupSub:'Cuéntanos las rutinas de tus perros para generar sus tareas diarias automáticamente.',
-    setupBtn:'Comenzar',
-    settingsTitle:'Ajustes',scheduleFor:'Horario para',
-    saveSettings:'Guardar Ajustes',
+    lastDay:'Último día hoy',daysLeft:'días restantes, termina',completed:'Completado',started:'Comenzó',
+    noEntries:'Sin entradas aún',yesterday:'ayer',justNow:'ahora mismo',
+    overdue:'días desde el último',back:'Volver',
+    settingsTitle:'Ajustes',
+    dogProfiles:'Perfiles',schedules:'Rutinas Diarias',
+    appPrefs:'Preferencias',language:'Idioma',
+    dataManagement:'Gestión de Datos',exportCSV:'Exportar datos como CSV',clearData:'Borrar todos los datos',
+    clearDataQ:'¿Borrar todos los datos?',clearDataWarn:'Esto eliminará permanentemente todas las entradas. Los perfiles y rutinas se conservan.',
+    mealsPerDay:'Comidas por día',groomEvery:'Baño — cada',analEvery:'Glándulas — cada',
+    saveSettings:'Guardar',
+    breed:'Raza',age:'Edad (años)',weight:'Peso (kg)',
+    nDays:'días',nWeeks:'semanas',nMonth:'mes',
+    obStep1Title:'¡Bienvenido a Paw Pack!',obStep1Sub:'Primero, elige tu idioma.',
+    obStep2Title:'Agrega tus perros',obStep2Sub:'Agrega cada perro de tu manada. Puedes editarlos después.',
+    obStep3Title:'Rutinas diarias',obStep3Sub:'Configura la rutina de cada perro para generar su lista de tareas diarias.',
+    obAddDog:'+ Agregar otro perro',obDogName:'Nombre del perro',obDone:'Comenzar',
     selectFreq:'Seleccionar frecuencia',selectType:'Seleccionar tipo',
-    nDays:'días',nWeeks:'semanas',nMonths:'mes'
+    name:'Nombre',
   }
 };
 
@@ -346,11 +328,12 @@ const FIELDS={
 };
 
 let lang=localStorage.getItem('pawpack_lang')||'en';
+let DOGS=JSON.parse(localStorage.getItem('pawpack_dogs')||'null')||[];
+
 let S={
-  view:'home',
-  dogView:null,
-  dogTab:'overview',
-  modalType:null,modalDogs:[0],editId:null,pendingDel:null,
+  view:'home',dogView:null,dogTab:'overview',
+  modalType:null,modalDogs:[0],editId:null,
+  pendingAction:null,
   calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),calSelected:null,
   punIdx:Math.floor(Math.random()*PUNS.length),
   entries:[],
@@ -360,6 +343,8 @@ let S={
 
 function t(k){return T[lang][k]||k}
 function todayISO(){return new Date().toISOString().slice(0,10)}
+function dogInitials(name){return name?name.slice(0,2).toUpperCase():'??'}
+
 function fmtDate(iso){
   const d=new Date(iso),now=new Date(),diff=Math.floor((now-d)/60000);
   if(diff<2)return t('justNow');
@@ -383,7 +368,7 @@ function setSyncDot(s){
 async function loadFromSupabase(){
   setSyncDot('syncing');
   try{
-    const r=await fetch(API+'?order=ts.desc&limit=1000',{headers:{...H,'Prefer':'return=representation'}});
+    const r=await fetch(API+'?order=ts.desc&limit=1000',{headers:{...SBH,'Prefer':'return=representation'}});
     if(!r.ok)throw new Error();
     S.entries=await r.json();
     localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
@@ -396,25 +381,18 @@ async function loadFromSupabase(){
 }
 async function pushEntry(entry){
   setSyncDot('syncing');
-  try{await fetch(API,{method:'POST',headers:{...H,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(entry)});setSyncDot('synced');}
+  try{await fetch(API,{method:'POST',headers:{...SBH,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(entry)});setSyncDot('synced');}
   catch(e){setSyncDot('error')}
 }
-async function updateEntry(entry){
+async function updateEntryDB(entry){
   setSyncDot('syncing');
-  try{await fetch(API+`?id=eq.${entry.id}`,{method:'PATCH',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify({dogs:entry.dogs,data:entry.data})});setSyncDot('synced');}
+  try{await fetch(API+`?id=eq.${entry.id}`,{method:'PATCH',headers:{...SBH},body:JSON.stringify({dogs:entry.dogs,data:entry.data})});setSyncDot('synced');}
   catch(e){setSyncDot('error')}
 }
 async function deleteEntryDB(id){
   setSyncDot('syncing');
-  try{await fetch(API+`?id=eq.${id}`,{method:'DELETE',headers:H});setSyncDot('synced');}
+  try{await fetch(API+`?id=eq.${id}`,{method:'DELETE',headers:SBH});setSyncDot('synced');}
   catch(e){setSyncDot('error')}
-}
-
-function toggleLang(){
-  lang=lang==='en'?'es':'en';
-  localStorage.setItem('pawpack_lang',lang);
-  document.getElementById('lang-btn').textContent=lang==='en'?'ES':'EN';
-  renderAll();
 }
 
 function getMedStatus(e){
@@ -428,117 +406,131 @@ function getMedStatus(e){
   const daysLeft=Math.max(0,daysBetween(todayISO(),end.toISOString().slice(0,10)));
   return{active:today<=end&&today>=start,pct,daysLeft,endDate:end.toISOString().slice(0,10)};
 }
-
+function freqLabel(f){
+  const map={'1xday':t('oncedaily'),'2xday':t('twicedaily'),'3xday':t('3xdaily'),'4xday':t('4xdaily'),'every_other':t('everyother'),'weekly':t('weekly'),'as_needed':t('asneeded')};
+  return map[f]||f||'';
+}
 function entryLabel(type,data){
   if(type==='feed')return data.amount||t('feeding');
   if(type==='med')return(data.med_name||t('medication'))+(data.dose?' · '+data.dose:'');
   if(type==='groom')return data.groom_type||t('grooming');
   if(type==='vet')return data.reason||t('vet');
 }
-
 function actionBtns(id){
   return`<div class="item-actions">
     <button class="act" onclick="openModal(null,${id})">${lang==='es'?'Editar':'Edit'}</button>
     <button class="act del" onclick="askDel(${id})">${lang==='es'?'Borrar':'Delete'}</button>
   </div>`;
 }
-
 function getDaysSinceLastGroom(dogIdx,groomType){
-  const entries=S.entries.filter(e=>e.type==='groom'&&e.dogs.includes(dogIdx)&&e.data.groom_type===groomType);
-  if(!entries.length)return null;
-  entries.sort((a,b)=>new Date(b.ts)-new Date(a.ts));
-  return daysBetween(entries[0].ts.slice(0,10),todayISO());
+  const items=S.entries.filter(e=>e.type==='groom'&&e.dogs.includes(dogIdx)&&e.data.groom_type===groomType);
+  if(!items.length)return null;
+  items.sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+  return daysBetween(items[0].ts.slice(0,10),todayISO());
 }
-
 function getTaskKey(dogIdx,type,sub){return`${todayISO()}_${dogIdx}_${type}_${sub||''}`}
 
 function getTasksDue(){
   const sc=S.schedule;
   if(!sc)return[];
   const tasks=[];
-  const today=todayISO();
   DOGS.forEach((dog,di)=>{
-    const dsc=sc[di];
-    if(!dsc)return;
-    // Meals
+    const dsc=sc[di];if(!dsc)return;
     const meals=parseInt(dsc.meals)||0;
     for(let m=0;m<meals;m++){
       const key=getTaskKey(di,'feed',m);
-      tasks.push({key,dogIdx:di,type:'feed',label:`${dog.name} — ${t('feeding')} ${meals>1?`#${m+1}`:''}`,done:!!S.tasks[key]});
+      tasks.push({key,dogIdx:di,type:'feed',label:`${dog.name} — ${t('feeding')}${meals>1?' #'+(m+1):''}`,done:!!S.tasks[key],showMeta:false});
     }
-    // Active meds
     S.entries.filter(e=>e.type==='med'&&e.dogs.includes(di)).forEach(e=>{
-      const st=getMedStatus(e);
-      if(!st||!st.active)return;
+      const st=getMedStatus(e);if(!st||!st.active)return;
       const freq=e.data.frequency;
-      const timesPerDay=freq==='2xday'?2:freq==='3xday'?3:freq==='4xday'?4:freq==='every_other'?0.5:freq==='weekly'?0:1;
-      if(timesPerDay<1&&freq!=='every_other')return;
-      const count=freq==='every_other'?1:Math.max(1,Math.round(timesPerDay));
+      const count=freq==='2xday'?2:freq==='3xday'?3:freq==='4xday'?4:1;
       for(let m=0;m<count;m++){
         const key=getTaskKey(di,'med',e.id+'_'+m);
-        tasks.push({key,dogIdx:di,type:'med',label:`${dog.name} — ${e.data.med_name||t('medication')}${count>1?' #'+(m+1):''}`,done:!!S.tasks[key]});
+        tasks.push({key,dogIdx:di,type:'med',label:`${dog.name} — ${e.data.med_name||t('medication')}${count>1?' #'+(m+1):''}`,done:!!S.tasks[key],showMeta:false});
       }
     });
-    // Grooming
     if(dsc.groomFreqDays){
       const days=parseInt(dsc.groomFreqDays);
       const last=getDaysSinceLastGroom(di,'Bath');
-      const key=getTaskKey(di,'groom','bath');
       if(last===null||last>=days){
-        tasks.push({key,dogIdx:di,type:'groom',label:`${dog.name} — ${t('bath')}`,done:!!S.tasks[key],overdue:last!==null?last:null});
+        const key=getTaskKey(di,'groom','bath');
+        tasks.push({key,dogIdx:di,type:'groom',label:`${dog.name} — ${t('bath')}`,done:!!S.tasks[key],showMeta:true,overdue:last});
       }
     }
     if(dsc.analFreqDays){
       const days=parseInt(dsc.analFreqDays);
       const last=getDaysSinceLastGroom(di,'Anal glands');
-      const key=getTaskKey(di,'groom','anal');
       if(last===null||last>=days){
-        tasks.push({key,dogIdx:di,type:'groom',label:`${dog.name} — ${t('analGlands')}`,done:!!S.tasks[key],overdue:last!==null?last:null});
+        const key=getTaskKey(di,'groom','anal');
+        tasks.push({key,dogIdx:di,type:'groom',label:`${dog.name} — ${t('analGlands')}`,done:!!S.tasks[key],showMeta:true,overdue:last});
       }
     }
   });
   return tasks;
 }
 
-function toggleTask(key){
-  S.tasks[key]=!S.tasks[key];
+function toggleTask(key,dogIdx,type){
+  const wasChecked=!!S.tasks[key];
+  S.tasks[key]=!wasChecked;
   localStorage.setItem('pawpack_tasks_'+todayISO(),JSON.stringify(S.tasks));
-  renderAll();
+  if(!wasChecked){
+    // Log the entry to the dog's profile
+    const typeMap={feed:'feed',med:'med',groom:'groom'};
+    const entryType=typeMap[type]||'feed';
+    let data={};
+    if(entryType==='feed') data={amount:t('feeding'),notes:lang==='es'?'Registrado desde lista de tareas':'Logged from task list'};
+    else if(entryType==='groom'){
+      const isAnal=key.includes('anal');
+      data={groom_type:isAnal?'Anal glands':'Bath',notes:lang==='es'?'Registrado desde lista de tareas':'Logged from task list'};
+    }
+    const entry={id:Date.now()+dogIdx,type:entryType,dogs:[dogIdx],ts:new Date().toISOString(),data};
+    S.entries.unshift(entry);
+    localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
+    pushEntry(entry);
+    // Fade out then re-render
+    const el=document.querySelector(`[data-task-key="${key}"]`);
+    if(el){
+      el.classList.add('task-fading');
+      setTimeout(()=>renderAll(),600);
+    } else renderAll();
+  } else {
+    renderAll();
+  }
 }
 
 // ---- VIEWS ----
-
 function renderHome(){
   const pun=PUNS[S.punIdx];
   const tasks=getTasksDue();
+  const pendingTasks=tasks.filter(t=>!t.done);
   const doneCnt=tasks.filter(t=>t.done).length;
-  const taskHtml=tasks.length?tasks.map(task=>`
-    <div class="task-item${task.done?' done':''}" onclick="toggleTask('${task.key}')">
+  const taskHtml=pendingTasks.length?pendingTasks.map(task=>`
+    <div class="task-item${task.done?' done':''}" data-task-key="${task.key}" onclick="toggleTask('${task.key}',${task.dogIdx},'${task.type}')">
       <div class="task-check">${task.done?'✓':''}</div>
-      <div class="task-avatar" style="background:${DOG_BG[task.dogIdx]};color:${DOG_TEXT[task.dogIdx]}">${DOGS[task.dogIdx].short}</div>
+      <div class="task-avatar" style="background:${DOG_BG[task.dogIdx%4]};color:${DOG_TEXT[task.dogIdx%4]}">${dogInitials(DOGS[task.dogIdx]?.name)}</div>
       <div style="flex:1">
         <div class="task-label">${task.label}</div>
-        ${task.overdue!==null?`<div class="task-meta">${task.overdue} ${t('overdue')}</div>`:''}
+        ${task.showMeta&&task.overdue!==null?`<div class="task-meta">${task.overdue} ${t('overdue')}</div>`:''}
       </div>
-      ${task.type==='feed'?`<span style="font-size:16px">🍽</span>`:task.type==='med'?`<span style="font-size:16px">💊</span>`:task.type==='groom'?`<span style="font-size:16px">🛁</span>`:''}
+      <span style="font-size:16px">${META[task.type]?.icon||''}</span>
     </div>`).join(''):`<div class="empty">${t('noTasks')}</div>`;
 
   return`
     <div class="home-pun">
-      <button class="pun-refresh" onclick="nextPun()">🔄</button>
       <div class="pun-text">${pun[lang]}</div>
-      <div class="pun-sub">Paw Pack 🐾</div>
+      <button class="pun-refresh" onclick="nextPun()">🔄 ${lang==='es'?'Otro chiste':'Another one'}</button>
     </div>
-    <div class="home-section">
+    <div class="home-section" style="margin-top:14px">
       <div class="home-section-title">${t('todayTasks')} ${tasks.length?`(${doneCnt}/${tasks.length})`:''}</div>
       ${taskHtml}
     </div>
     <div class="home-section-title" style="padding:0 16px;margin-bottom:10px">${t('yourPack')}</div>
-    <div class="dog-grid" id="dog-grid">
+    <div class="dog-grid">
       ${DOGS.map((d,i)=>{
         const todayCount=S.entries.filter(e=>e.dogs.includes(i)&&e.ts.slice(0,10)===todayISO()).length;
-        return`<div class="dog-card" data-i="${i}" onclick="openDog(${i})">
-          <div class="av" style="background:${DOG_BG[i]};color:${DOG_TEXT[i]}">${d.short}</div>
+        return`<div class="dog-card" onclick="openDog(${i})">
+          <div class="av" style="background:${DOG_BG[i%4]};color:${DOG_TEXT[i%4]}">${dogInitials(d.name)}</div>
           <div class="dn">${d.name}</div>
           <div class="ds">${todayCount} ${lang==='es'?'hoy':'today'}</div>
         </div>`;
@@ -553,10 +545,10 @@ function renderDogsList(){
     <div style="font-size:13px;color:var(--text2);margin-bottom:14px">${lang==='es'?'Selecciona un perro para ver su perfil':'Select a dog to view their profile'}</div>
     ${DOGS.map((d,i)=>`
       <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow)" onclick="openDog(${i})">
-        <div style="width:44px;height:44px;border-radius:50%;background:${DOG_BG[i]};color:${DOG_TEXT[i]};display:flex;align-items:center;justify-content:center;font-weight:500;font-size:16px">${d.short}</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:${DOG_BG[i%4]};color:${DOG_TEXT[i%4]};display:flex;align-items:center;justify-content:center;font-weight:500;font-size:16px">${dogInitials(d.name)}</div>
         <div style="flex:1">
           <div style="font-size:15px;font-weight:500;color:var(--text)">${d.name}</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:2px">${S.entries.filter(e=>e.dogs.includes(i)).length} ${lang==='es'?'entradas totales':'total entries'}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">${d.breed||''}${d.age?' · '+d.age+' yr':''}${d.weight?' · '+d.weight+' kg':''}</div>
         </div>
         <div style="color:var(--text3);font-size:18px">›</div>
       </div>`).join('')}
@@ -564,12 +556,11 @@ function renderDogsList(){
 }
 
 function renderDogProfile(di){
-  const dog=DOGS[di];
+  const dog=DOGS[di]||{name:'?'};
   const alerts=S.entries.filter(e=>e.type==='med'&&e.dogs.includes(di)).map(e=>{
     const st=getMedStatus(e);if(!st||!st.active)return'';
     const txt=st.daysLeft===0?t('lastDay'):`${st.daysLeft} ${t('daysLeft')} ${fmtDs(st.endDate)}`;
-    const freq=freqLabel(e.data.frequency);
-    return`<div class="alert-box"><strong>${e.data.med_name||t('medication')}</strong> — ${txt}. ${freq}</div>`;
+    return`<div class="alert-box"><strong>${e.data.med_name||t('medication')}</strong> — ${txt}. ${freqLabel(e.data.frequency)}</div>`;
   }).join('');
 
   const tabs=['overview','feed','med','groom','vet'];
@@ -578,14 +569,14 @@ function renderDogProfile(di){
 
   let content='';
   if(S.dogTab==='overview'){
-    const recent=S.entries.filter(e=>e.dogs.includes(di)).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,8);
+    const recent=S.entries.filter(e=>e.dogs.includes(di)).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,10);
     content=`<div class="card">
       <div class="card-header"><span class="card-title">${t('recentActivity')}</span></div>
       ${recent.length?recent.map(e=>`<div class="log-item">
-        <div class="dot" style="background:${META[e.type].dot};margin-top:5px"></div>
+        <div class="dot" style="background:${META[e.type]?.dot};margin-top:5px"></div>
         <div class="log-body">
           <div class="log-label">${entryLabel(e.type,e.data)}</div>
-          <div class="log-meta">${t(META[e.type].labelKey)} · ${fmtDate(e.ts)}</div>
+          <div class="log-meta">${t(META[e.type]?.labelKey)} · ${fmtDate(e.ts)}</div>
         </div>
         ${actionBtns(e.id)}
       </div>`).join(''):`<div class="empty">${t('noEntries')}</div>`}
@@ -601,7 +592,7 @@ function renderDogProfile(di){
     const items=S.entries.filter(e=>e.type===type&&e.dogs.includes(di)).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
     content=`<div class="card">
       <div class="card-header">
-        <span class="card-title">${t(META[type].labelKey)} · ${dog.name}</span>
+        <span class="card-title">${t(META[type]?.labelKey)} · ${dog.name}</span>
         <button class="add-btn" onclick="openModal('${type}',null)">+ ${lang==='es'?'Agregar':'Add'}</button>
       </div>
       ${items.length?items.map(e=>renderLogItem(e,type,di)).join(''):`<div class="empty">${t('noEntries')}</div>`}
@@ -609,12 +600,12 @@ function renderDogProfile(di){
   }
 
   return`
-    <button class="back-btn" onclick="closeDog()">← ${lang==='es'?'Volver':'Back'}</button>
+    <button class="back-btn" onclick="closeDog()">← ${t('back')}</button>
     <div class="profile-header" style="margin-top:10px">
-      <div class="profile-av" style="background:${DOG_BG[di]};color:${DOG_TEXT[di]}">${dog.short}</div>
+      <div class="profile-av" style="background:${DOG_BG[di%4]};color:${DOG_TEXT[di%4]}">${dogInitials(dog.name)}</div>
       <div>
         <div class="profile-name">${dog.name}</div>
-        <div class="profile-sub">${S.entries.filter(e=>e.dogs.includes(di)).length} ${lang==='es'?'entradas':'entries'}</div>
+        <div class="profile-sub">${dog.breed||''}${dog.age?' · '+dog.age+' yr':''}${dog.weight?' · '+dog.weight+' kg':''}</div>
       </div>
     </div>
     ${alerts}
@@ -623,11 +614,11 @@ function renderDogProfile(di){
 }
 
 function renderLogItem(e,type,activeDog){
-  if(type==='med') return renderMedItem(e,activeDog);
-  const dn=e.dogs.filter(i=>i!==activeDog).map(i=>DOGS[i].name).join(', ');
+  if(type==='med')return renderMedItem(e,activeDog);
+  const dn=e.dogs.filter(i=>i!==activeDog).map(i=>DOGS[i]?.name).filter(Boolean).join(', ');
   const vd=type==='vet'&&e.data.visit_date?`<div><span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--blue-bg);color:var(--blue-text)">${fmtDs(e.data.visit_date)}</span></div>`:'';
   return`<div class="log-item">
-    <div class="dot" style="background:${META[type].dot};margin-top:5px"></div>
+    <div class="dot" style="background:${META[type]?.dot};margin-top:5px"></div>
     <div class="log-body">
       <div class="log-label">${entryLabel(type,e.data)}</div>
       ${vd}
@@ -638,11 +629,10 @@ function renderLogItem(e,type,activeDog){
     ${actionBtns(e.id)}
   </div>`;
 }
-
 function renderMedItem(e,activeDog){
   const st=getMedStatus(e);
   const fl=freqLabel(e.data.frequency);
-  const dn=e.dogs.filter(i=>i!==activeDog).map(i=>DOGS[i].name).join(', ');
+  const dn=e.dogs.filter(i=>i!==activeDog).map(i=>DOGS[i]?.name).filter(Boolean).join(', ');
   let stHtml='';
   if(st){
     const col=st.active?(st.daysLeft<=1?'var(--accent)':'var(--green)'):'#aaa';
@@ -662,11 +652,6 @@ function renderMedItem(e,activeDog){
   </div>`;
 }
 
-function freqLabel(f){
-  const map={'1xday':t('oncedaily'),'2xday':t('twicedaily'),'3xday':t('3xdaily'),'4xday':t('4xdaily'),'every_other':t('everyother'),'weekly':t('weekly'),'as_needed':t('asneeded')};
-  return map[f]||f||'';
-}
-
 function renderCalendar(){
   const year=S.calYear,month=S.calMonth;
   const monthName=new Date(year,month,1).toLocaleDateString(lang==='es'?'es-GT':'en-US',{month:'long',year:'numeric'});
@@ -674,25 +659,17 @@ function renderCalendar(){
   const daysInMonth=new Date(year,month+1,0).getDate();
   const today=todayISO();
   const dayNames=lang==='es'?['Do','Lu','Ma','Mi','Ju','Vi','Sa']:['Su','Mo','Tu','We','Th','Fr','Sa'];
-
   const entryDates={};
-  S.entries.forEach(e=>{
-    const d=e.ts.slice(0,10);
-    if(!entryDates[d])entryDates[d]=[];
-    entryDates[d].push(e.type);
-  });
-
+  S.entries.forEach(e=>{const d=e.ts.slice(0,10);if(!entryDates[d])entryDates[d]=[];entryDates[d].push(e.type);});
   let cells='';
-  for(let i=0;i<firstDay;i++)cells+=`<div class="cal-day empty-day"></div>`;
+  for(let i=0;i<firstDay;i++)cells+=`<div></div>`;
   for(let d=1;d<=daysInMonth;d++){
     const iso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const types=[...new Set(entryDates[iso]||[])];
-    const dots=types.map(t=>`<div class="cal-dot" style="background:${META[t]?META[t].dot:'#ccc'}"></div>`).join('');
+    const dots=types.map(tp=>`<div class="cal-dot" style="background:${META[tp]?.dot||'#ccc'}"></div>`).join('');
     const cls=`cal-day${iso===today?' today':''}${iso===S.calSelected?' selected':''}`;
-    cells+=`<div class="${cls}" onclick="selectCalDay('${iso}')">${d}${dots?`<div class="cal-dots">${dots}</div>`:''}`;
-    cells+=`</div>`;
+    cells+=`<div class="${cls}" onclick="selectCalDay('${iso}')">${d}${dots?`<div class="cal-dots">${dots}</div>`:''}</div>`;
   }
-
   let detail='';
   if(S.calSelected){
     const dayEntries=S.entries.filter(e=>e.ts.slice(0,10)===S.calSelected).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
@@ -700,19 +677,18 @@ function renderCalendar(){
     detail=`<div class="cal-detail">
       <div class="cal-detail-title">${selLabel}</div>
       ${dayEntries.length?dayEntries.map(e=>{
-        const dogNames=e.dogs.map(i=>DOGS[i].name).join(', ');
+        const dogNames=e.dogs.map(i=>DOGS[i]?.name).filter(Boolean).join(', ');
         return`<div class="log-item" style="padding:8px 0">
-          <div class="dot" style="background:${META[e.type].dot};margin-top:5px"></div>
+          <div class="dot" style="background:${META[e.type]?.dot};margin-top:5px"></div>
           <div class="log-body" style="padding-right:0">
             <div class="log-label">${entryLabel(e.type,e.data)}</div>
-            <div class="log-meta">${t(META[e.type].labelKey)} · ${dogNames}</div>
+            <div class="log-meta">${t(META[e.type]?.labelKey)} · ${dogNames}</div>
             ${e.data.notes?`<div class="log-note">${e.data.notes}</div>`:''}
           </div>
         </div>`;
       }).join(''):`<div class="empty" style="padding:12px 0">${t('noEntries')}</div>`}
     </div>`;
   }
-
   return`
     <div class="cal-nav">
       <button onclick="calNav(-1)">‹</button>
@@ -720,12 +696,10 @@ function renderCalendar(){
       <button onclick="calNav(1)">›</button>
     </div>
     <div class="cal-grid">
-      ${dayNames.map(n=>`<div class="cal-day-name">${n}</div>`).join('')}
-      ${cells}
+      ${dayNames.map(n=>`<div class="cal-day-name">${n}</div>`).join('')}${cells}
     </div>
     ${detail}`;
 }
-
 function calNav(dir){
   S.calMonth+=dir;
   if(S.calMonth>11){S.calMonth=0;S.calYear++;}
@@ -736,50 +710,79 @@ function selectCalDay(iso){S.calSelected=S.calSelected===iso?null:iso;renderAll(
 
 function renderSettings(){
   const sc=S.schedule||{};
-  return`<div style="padding:16px">
-    <div style="font-size:18px;font-weight:500;margin-bottom:16px;color:var(--text)">${t('settingsTitle')}</div>
-    ${DOGS.map((dog,di)=>{
-      const dsc=sc[di]||{};
-      return`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:${DOG_BG[di]};color:${DOG_TEXT[di]};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500">${dog.short}</div>
-          <div style="font-size:14px;font-weight:500">${dog.name}</div>
-        </div>
-        <div style="margin-bottom:8px">
-          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${t('mealsPerDay')}</label>
-          <select id="sc-meals-${di}" style="width:100%;font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
-            ${[1,2,3,4].map(n=>`<option value="${n}"${parseInt(dsc.meals)===n?' selected':''}>${n}x ${lang==='es'?'al día':'per day'}</option>`).join('')}
-          </select>
-        </div>
-        <div style="margin-bottom:8px">
-          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${t('bath')} — ${t('groomEvery')}</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input id="sc-groom-n-${di}" type="number" min="1" value="${dsc.groomFreqN||''}" placeholder="e.g. 2" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif">
-            <select id="sc-groom-u-${di}" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
-              <option value="7"${dsc.groomFreqUnit==='7'?' selected':''}>${t('nWeeks')}</option>
-              <option value="30"${dsc.groomFreqUnit==='30'?' selected':''}>${t('nMonths')}</option>
-              <option value="1"${dsc.groomFreqUnit==='1'?' selected':''}>${t('nDays')}</option>
+  const twoColRow=(label,val)=>`<div class="settings-row"><div><div class="settings-row-label">${label}</div></div><div class="settings-row-right">${val}</div></div>`;
+  return`
+    <div style="padding-top:14px">
+      <div class="settings-section">
+        <div class="settings-section-title">${t('dogProfiles')}</div>
+        ${DOGS.map((dog,di)=>`
+          <div class="settings-row" style="cursor:pointer" onclick="openDogEdit(${di})">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:32px;height:32px;border-radius:50%;background:${DOG_BG[di%4]};color:${DOG_TEXT[di%4]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${dogInitials(dog.name)}</div>
+              <div>
+                <div class="settings-row-label" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">${dog.name}</div>
+                <div style="font-size:12px;color:var(--text2)">${dog.breed||''}${dog.age?' · '+dog.age+' yr':''}${dog.weight?' · '+dog.weight+' kg':''}</div>
+              </div>
+            </div>
+            <div style="color:var(--text3)">›</div>
+          </div>`).join('')}
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">${t('schedules')}</div>
+        ${DOGS.map((dog,di)=>{
+          const dsc=sc[di]||{};
+          return`<div style="margin-bottom:14px">
+            <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px">${dog.name}</div>
+            <div class="settings-label">${t('mealsPerDay')}</div>
+            <select class="settings-select" id="sc-meals-${di}">
+              ${[1,2,3,4].map(n=>`<option value="${n}"${parseInt(dsc.meals)===n?' selected':''}>${n}x ${lang==='es'?'al día':'per day'}</option>`).join('')}
             </select>
+            <div class="settings-label" style="margin-top:10px">${t('groomEvery')}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <input class="settings-input" id="sc-groom-n-${di}" type="number" min="1" value="${dsc.groomFreqN||''}" placeholder="2">
+              <select class="settings-select" id="sc-groom-u-${di}">
+                <option value="7"${dsc.groomFreqUnit==='7'?' selected':''}>${t('nWeeks')}</option>
+                <option value="30"${dsc.groomFreqUnit==='30'?' selected':''}>${t('nMonth')}</option>
+                <option value="1"${dsc.groomFreqUnit==='1'?' selected':''}>${t('nDays')}</option>
+              </select>
+            </div>
+            <div class="settings-label" style="margin-top:10px">${t('analEvery')}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <input class="settings-input" id="sc-anal-n-${di}" type="number" min="1" value="${dsc.analFreqN||''}" placeholder="1">
+              <select class="settings-select" id="sc-anal-u-${di}">
+                <option value="7"${dsc.analFreqUnit==='7'?' selected':''}>${t('nWeeks')}</option>
+                <option value="30"${dsc.analFreqUnit==='30'?' selected':''}>${t('nMonth')}</option>
+                <option value="1"${dsc.analFreqUnit==='1'?' selected':''}>${t('nDays')}</option>
+              </select>
+            </div>
+          </div>`;
+        }).join('')}
+        <button class="btn-primary" onclick="saveSchedule()">${t('saveSettings')}</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">${t('appPrefs')}</div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">${t('language')}</div></div>
+          <div style="display:flex;gap:6px">
+            <button style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;background:${lang==='en'?'var(--text)':'transparent'};color:${lang==='en'?'#fff':'var(--text2)'}" onclick="setLang('en')">EN</button>
+            <button style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;background:${lang==='es'?'var(--text)':'transparent'};color:${lang==='es'?'#fff':'var(--text2)'}" onclick="setLang('es')">ES</button>
           </div>
         </div>
-        <div>
-          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${t('analGlands')} — ${t('groomEvery')}</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input id="sc-anal-n-${di}" type="number" min="1" value="${dsc.analFreqN||''}" placeholder="e.g. 1" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif">
-            <select id="sc-anal-u-${di}" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
-              <option value="7"${dsc.analFreqUnit==='7'?' selected':''}>${t('nWeeks')}</option>
-              <option value="30"${dsc.analFreqUnit==='30'?' selected':''}>${t('nMonths')}</option>
-              <option value="1"${dsc.analFreqUnit==='1'?' selected':''}>${t('nDays')}</option>
-            </select>
-          </div>
-        </div>
-      </div>`;
-    }).join('')}
-    <button class="btn-primary" onclick="saveSettings()">${t('saveSettings')}</button>
-  </div>`;
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">${t('dataManagement')}</div>
+        <button class="btn-secondary" onclick="exportCSV()">${t('exportCSV')}</button>
+        <button class="btn-danger" onclick="askClearData()">${t('clearData')}</button>
+      </div>
+    </div>`;
 }
 
-function saveSettings(){
+function setLang(l){lang=l;localStorage.setItem('pawpack_lang',l);renderAll()}
+
+function saveSchedule(){
   const sc={};
   DOGS.forEach((dog,di)=>{
     const meals=document.getElementById(`sc-meals-${di}`)?.value;
@@ -797,69 +800,161 @@ function saveSettings(){
   });
   S.schedule=sc;
   localStorage.setItem('pawpack_schedule',JSON.stringify(sc));
-  showView('home');
+  const btn=document.querySelector('[onclick="saveSchedule()"]');
+  if(btn){btn.textContent='✓ '+t('saveSettings');setTimeout(()=>{btn.textContent=t('saveSettings')},1500);}
 }
+
+function openDogEdit(di){
+  const dog=DOGS[di]||{};
+  S.modalType='dog_edit';S.editId=di;
+  document.getElementById('modal-title').textContent=dog.name||'Dog';
+  document.getElementById('modal-body').innerHTML=`
+    <label>${t('name')}</label><input id="mf-dname" type="text" value="${dog.name||''}">
+    <label>${t('breed')}</label><input id="mf-dbreed" type="text" value="${dog.breed||''}" placeholder="${lang==='es'?'ej. Labrador':'e.g. Labrador'}">
+    <label>${t('age')}</label><input id="mf-dage" type="number" min="0" step="0.5" value="${dog.age||''}">
+    <label>${t('weight')}</label><input id="mf-dweight" type="number" min="0" step="0.1" value="${dog.weight||''}">`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function exportCSV(){
+  const rows=[['id','type','dogs','timestamp','amount','med_name','dose','frequency','start_date','duration_days','groom_type','visit_date','reason','vet_name','notes']];
+  S.entries.forEach(e=>{
+    const d=e.data||{};
+    const dogNames=e.dogs.map(i=>DOGS[i]?.name).filter(Boolean).join(';');
+    rows.push([e.id,e.type,dogNames,e.ts,d.amount||'',d.med_name||'',d.dose||'',d.frequency||'',d.start_date||'',d.duration_days||'',d.groom_type||'',d.visit_date||'',d.reason||'',d.vet_name||'',d.notes||'']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='pawpack_export_'+todayISO()+'.csv';
+  a.click();
+}
+
+function askClearData(){
+  S.pendingAction='clearData';
+  document.getElementById('confirm-title').textContent=t('clearDataQ');
+  document.getElementById('confirm-sub').textContent=t('clearDataWarn');
+  document.getElementById('confirm-btn').textContent=t('delete');
+  document.getElementById('confirm').style.display='flex';
+}
+
+// ---- ONBOARDING ----
+let obStep=1;
+let obDogs=[{name:''}];
+let obLang='en';
+let obSchedule={};
 
 function renderOnboarding(){
   const el=document.getElementById('onboard-screen');
   el.style.display='block';
   document.getElementById('app').style.display='none';
-  el.innerHTML=`<div class="onboard">
-    <h1>Paw Pack 🐾</h1>
-    <p>${t('setupSub')}</p>
-    ${DOGS.map((dog,di)=>`
-      <div class="dog-onboard">
-        <div class="dog-onboard-header">
-          <div class="dog-onboard-av" style="background:${DOG_BG[di]};color:${DOG_TEXT[di]}">${dog.short}</div>
-          <div class="dog-onboard-name">${dog.name}</div>
+  const steps=3;
+  const dots=Array.from({length:steps},(_,i)=>`<div class="step-dot${i+1===obStep?' active':''}"></div>`).join('');
+  let content='';
+  if(obStep===1){
+    content=`
+      <h1>${T[obLang].obStep1Title}</h1>
+      <p>${T[obLang].obStep1Sub}</p>
+      <div class="lang-option${obLang==='en'?' selected':''}" onclick="obSetLang('en')">
+        <div><div class="lo-name">English</div><div class="lo-sub">English</div></div>
+        <div class="lo-check">${obLang==='en'?'✓':''}</div>
+      </div>
+      <div class="lang-option${obLang==='es'?' selected':''}" onclick="obSetLang('es')">
+        <div><div class="lo-name">Español</div><div class="lo-sub">Spanish</div></div>
+        <div class="lo-check">${obLang==='es'?'✓':''}</div>
+      </div>
+      <button class="btn-primary" style="margin-top:24px" onclick="obNext()">→ ${T[obLang].save}</button>`;
+  } else if(obStep===2){
+    const L=T[obLang];
+    const dogSlots=obDogs.map((d,i)=>`
+      <div class="dog-slot">
+        <div class="dog-slot-header">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="dog-slot-num" style="background:${DOG_BG[i%4]};color:${DOG_TEXT[i%4]}">${i+1}</div>
+            <span style="font-size:13px;color:var(--text2)">${L.obDogName}</span>
+          </div>
+          ${obDogs.length>1?`<button class="dog-slot-del" onclick="obRemoveDog(${i})">✕</button>`:''}
         </div>
-        <div class="onboard-field">
-          <label>${t('mealsPerDay')}</label>
-          <select id="ob-meals-${di}">
-            ${[1,2,3,4].map(n=>`<option value="${n}"${n===2?' selected':''}>${n}x ${lang==='es'?'al día':'per day'}</option>`).join('')}
+        <input style="width:100%;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif" id="ob-dog-${i}" type="text" value="${d.name}" placeholder="${L.obDogName}..." oninput="obDogs[${i}].name=this.value">
+      </div>`).join('');
+    content=`
+      <h1>${L.obStep2Title}</h1>
+      <p>${L.obStep2Sub}</p>
+      ${dogSlots}
+      ${obDogs.length<6?`<button class="add-dog-btn" onclick="obAddDog()">🐾 ${L.obAddDog}</button>`:''}
+      <button class="btn-primary" onclick="obNext()">→ ${L.save}</button>
+      <button class="btn-secondary" onclick="obBack()">← ${L.cancel}</button>`;
+  } else if(obStep===3){
+    const L=T[obLang];
+    const scheds=obDogs.map((d,i)=>`
+      <div class="sched-dog">
+        <div class="sched-dog-header">
+          <div class="sched-av" style="background:${DOG_BG[i%4]};color:${DOG_TEXT[i%4]}">${dogInitials(d.name||'?')}</div>
+          <span style="font-size:14px;font-weight:500;color:var(--text)">${d.name||'Dog '+(i+1)}</span>
+        </div>
+        <div style="margin-bottom:8px">
+          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${L.mealsPerDay}</label>
+          <select id="ob-meals-${i}" style="width:100%;font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
+            ${[1,2,3,4].map(n=>`<option value="${n}"${n===2?' selected':''}>${n}x ${obLang==='es'?'al día':'per day'}</option>`).join('')}
           </select>
         </div>
-        <div class="onboard-field">
-          <label>${t('bath')} — ${t('groomEvery')}</label>
+        <div style="margin-bottom:8px">
+          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${L.groomEvery}</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input id="ob-groom-n-${di}" type="number" min="1" placeholder="2">
-            <select id="ob-groom-u-${di}">
-              <option value="7">${t('nWeeks')}</option>
-              <option value="30">${t('nMonths')}</option>
-              <option value="1">${t('nDays')}</option>
+            <input id="ob-groom-n-${i}" type="number" min="1" placeholder="2" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif">
+            <select id="ob-groom-u-${i}" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
+              <option value="7">${L.nWeeks}</option><option value="30">${L.nMonth}</option><option value="1">${L.nDays}</option>
             </select>
           </div>
         </div>
-        <div class="onboard-field">
-          <label>${t('analGlands')} — ${t('groomEvery')}</label>
+        <div>
+          <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">${L.analEvery}</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <input id="ob-anal-n-${di}" type="number" min="1" placeholder="1">
-            <select id="ob-anal-u-${di}">
-              <option value="7">${t('nWeeks')}</option>
-              <option value="30">${t('nMonths')}</option>
-              <option value="1">${t('nDays')}</option>
+            <input id="ob-anal-n-${i}" type="number" min="1" placeholder="1" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif">
+            <select id="ob-anal-u-${i}" style="font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 10px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;appearance:none">
+              <option value="7">${L.nWeeks}</option><option value="30">${L.nMonth}</option><option value="1">${L.nDays}</option>
             </select>
           </div>
         </div>
-      </div>`).join('')}
-    <button class="btn-primary" onclick="finishOnboarding()">${t('setupBtn')} →</button>
-  </div>`;
+      </div>`).join('');
+    content=`
+      <h1>${L.obStep3Title}</h1>
+      <p>${L.obStep3Sub}</p>
+      ${scheds}
+      <button class="btn-primary" onclick="obFinish()">${L.obDone} 🐾</button>
+      <button class="btn-secondary" onclick="obBack()">← ${L.cancel}</button>`;
+  }
+  el.innerHTML=`<div class="onboard"><div class="onboard-step-indicator">${dots}</div>${content}</div>`;
 }
 
-function finishOnboarding(){
+function obSetLang(l){obLang=l;renderOnboarding()}
+function obAddDog(){if(obDogs.length<6){obDogs.push({name:''});renderOnboarding();}}
+function obRemoveDog(i){obDogs.splice(i,1);renderOnboarding()}
+function obNext(){
+  if(obStep===2){
+    obDogs.forEach((d,i)=>{const el=document.getElementById('ob-dog-'+i);if(el)d.name=el.value.trim();});
+    obDogs=obDogs.filter(d=>d.name);
+    if(!obDogs.length){obDogs=[{name:''}];renderOnboarding();return;}
+  }
+  obStep++;renderOnboarding();
+}
+function obBack(){obStep--;renderOnboarding()}
+function obFinish(){
+  obDogs.forEach((d,i)=>{const el=document.getElementById('ob-dog-'+i);if(el)d.name=el.value.trim()||d.name;});
+  lang=obLang;
+  localStorage.setItem('pawpack_lang',lang);
+  DOGS=obDogs.filter(d=>d.name).map(d=>({name:d.name,breed:'',age:'',weight:''}));
+  localStorage.setItem('pawpack_dogs',JSON.stringify(DOGS));
   const sc={};
   DOGS.forEach((dog,di)=>{
-    const meals=document.getElementById(`ob-meals-${di}`)?.value;
-    const groomN=document.getElementById(`ob-groom-n-${di}`)?.value;
-    const groomU=document.getElementById(`ob-groom-u-${di}`)?.value;
-    const analN=document.getElementById(`ob-anal-n-${di}`)?.value;
-    const analU=document.getElementById(`ob-anal-u-${di}`)?.value;
+    const gN=document.getElementById(`ob-groom-n-${di}`)?.value;
+    const gU=document.getElementById(`ob-groom-u-${di}`)?.value;
+    const aN=document.getElementById(`ob-anal-n-${di}`)?.value;
+    const aU=document.getElementById(`ob-anal-u-${di}`)?.value;
     sc[di]={
-      meals:parseInt(meals)||2,
-      groomFreqN:groomN,groomFreqUnit:groomU,
-      groomFreqDays:groomN&&groomU?parseInt(groomN)*parseInt(groomU):null,
-      analFreqN:analN,analFreqUnit:analU,
-      analFreqDays:analN&&analU?parseInt(analN)*parseInt(analU):null
+      meals:parseInt(document.getElementById(`ob-meals-${di}`)?.value)||2,
+      groomFreqN:gN,groomFreqUnit:gU,groomFreqDays:gN&&gU?parseInt(gN)*parseInt(gU):null,
+      analFreqN:aN,analFreqUnit:aU,analFreqDays:aN&&aU?parseInt(aN)*parseInt(aU):null
     };
   });
   S.schedule=sc;
@@ -873,8 +968,7 @@ function finishOnboarding(){
 function showView(v){
   S.view=v;S.dogView=null;
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  const navEl=document.getElementById('nav-'+v);
-  if(navEl)navEl.classList.add('active');
+  const el=document.getElementById('nav-'+v);if(el)el.classList.add('active');
   renderAll();
 }
 function openDog(i){S.dogView=i;S.dogTab='overview';renderAll()}
@@ -884,10 +978,8 @@ function setDogTab(tab){S.dogTab=tab;renderAll()}
 function renderAll(){
   const mc=document.getElementById('main-content');
   if(!mc)return;
-  if(S.dogView!==null){
-    mc.innerHTML=renderDogProfile(S.dogView);
-    return;
-  }
+  document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(T[lang][k])el.textContent=T[lang][k];});
+  if(S.dogView!==null){mc.innerHTML=renderDogProfile(S.dogView);return;}
   if(S.view==='home')mc.innerHTML=renderHome();
   else if(S.view==='dogs')mc.innerHTML=renderDogsList();
   else if(S.view==='calendar')mc.innerHTML=renderCalendar();
@@ -902,43 +994,23 @@ function buildBody(type,ex){
   const dp=DOGS.map((dog,i)=>`<div class="dog-pick${S.modalDogs.includes(i)?' picked':''}" id="dp-${i}" onclick="togDog(${i})">${dog.name}</div>`).join('');
   const ds=`<label>${t('dogLabel')}</label><div class="dog-pick-grid">${dp}</div>`;
   const groomOpts=['Bath','Anal glands','Nail trim','Brush','Other'].map((o,i)=>{
-    const labels=[t('bath'),t('analGlands'),t('nailTrim'),t('brush'),t('other')];
-    return`<option value="${o}"${d.groom_type===o?' selected':''}>${labels[i]}</option>`;
+    const lbs=[t('bath'),t('analGlands'),t('nailTrim'),t('brush'),t('other')];
+    return`<option value="${o}"${d.groom_type===o?' selected':''}>${lbs[i]}</option>`;
   }).join('');
   const freqOpts=[['1xday',t('oncedaily')],['2xday',t('twicedaily')],['3xday',t('3xdaily')],['4xday',t('4xdaily')],['every_other',t('everyother')],['weekly',t('weekly')],['as_needed',t('asneeded')]].map(([v,l])=>`<option value="${v}"${d.frequency===v?' selected':''}>${l}</option>`).join('');
-
-  if(type==='feed')return ds+`
-    <label>${t('amountLabel')}</label><input id="mf-amount" type="text" value="${d.amount||''}" placeholder="e.g. 1 cup kibble">
-    <label>${t('notesLabel')}</label><textarea id="mf-notes" placeholder="">${d.notes||''}</textarea>`;
-  if(type==='med')return ds+`
-    <label>${t('medName')}</label><input id="mf-med_name" type="text" value="${d.med_name||''}">
-    <label>${t('dose')}</label><input id="mf-dose" type="text" value="${d.dose||''}" placeholder="e.g. 1 drop">
-    <label>${t('frequency')}</label><select id="mf-frequency"><option value="">${t('selectFreq')}</option>${freqOpts}</select>
-    <div class="freq-row" style="margin-top:12px">
-      <div><label style="margin-top:0">${t('startDate')}</label><input id="mf-start_date" type="date" value="${d.start_date||todayISO()}"></div>
-      <div><label style="margin-top:0">${t('durationDays')}</label><input id="mf-duration_days" type="number" min="1" value="${d.duration_days||''}" placeholder="7"></div>
-    </div>
-    <label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
-  if(type==='groom')return ds+`
-    <label>${t('groomType')}</label><select id="mf-groom_type"><option value="">${t('selectType')}</option>${groomOpts}</select>
-    <label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
-  if(type==='vet')return ds+`
-    <label>${t('visitDate')}</label><input id="mf-visit_date" type="date" value="${d.visit_date||todayISO()}">
-    <label>${t('reason')}</label><input id="mf-reason" type="text" value="${d.reason||''}">
-    <label>${t('vetName')}</label><input id="mf-vet_name" type="text" value="${d.vet_name||''}">
-    <label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
+  if(type==='feed')return ds+`<label>${t('amountLabel')}</label><input id="mf-amount" type="text" value="${d.amount||''}" placeholder="e.g. 1 cup kibble"><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
+  if(type==='med')return ds+`<label>${t('medName')}</label><input id="mf-med_name" type="text" value="${d.med_name||''}"><label>${t('dose')}</label><input id="mf-dose" type="text" value="${d.dose||''}"><label>${t('frequency')}</label><select id="mf-frequency"><option value="">${t('selectFreq')}</option>${freqOpts}</select><div class="freq-row" style="margin-top:12px"><div><label style="margin-top:0">${t('startDate')}</label><input id="mf-start_date" type="date" value="${d.start_date||todayISO()}"></div><div><label style="margin-top:0">${t('durationDays')}</label><input id="mf-duration_days" type="number" min="1" value="${d.duration_days||''}" placeholder="7"></div></div><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
+  if(type==='groom')return ds+`<label>${t('groomType')}</label><select id="mf-groom_type"><option value="">${t('selectType')}</option>${groomOpts}</select><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
+  if(type==='vet')return ds+`<label>${t('visitDate')}</label><input id="mf-visit_date" type="date" value="${d.visit_date||todayISO()}"><label>${t('reason')}</label><input id="mf-reason" type="text" value="${d.reason||''}"><label>${t('vetName')}</label><input id="mf-vet_name" type="text" value="${d.vet_name||''}"><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
   return ds;
 }
 
 function openModal(type,editId){
   let ex=null;
-  if(editId!==null&&editId!==undefined){
-    ex=S.entries.find(e=>e.id===editId);
-    if(!ex)return;
-    type=ex.type;
-  }
+  if(editId!==null&&editId!==undefined){ex=S.entries.find(e=>e.id===editId);if(!ex)return;type=ex.type;}
   S.modalType=type;S.editId=editId??null;
-  const titleKey=S.editId!==null?`edit${type.charAt(0).toUpperCase()+type.slice(1)}`:`add${type.charAt(0).toUpperCase()+type.slice(1)}`;
+  const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  const titleKey=S.editId!==null?`edit${cap(type)}`:`add${cap(type)}`;
   document.getElementById('modal-title').textContent=t(titleKey);
   document.getElementById('modal-body').innerHTML=buildBody(type,ex);
   document.getElementById('modal').style.display='flex';
@@ -949,27 +1021,27 @@ function togDog(i){
   else S.modalDogs.push(i);
   DOGS.forEach((_,j)=>{const el=document.getElementById('dp-'+j);if(el)el.classList.toggle('picked',S.modalDogs.includes(j));});
 }
-function closeModal(){document.getElementById('modal').style.display='none';S.editId=null}
+function closeModal(){document.getElementById('modal').style.display='none';S.editId=null;S.modalType=null;}
 
 async function saveEntry(){
+  if(S.modalType==='dog_edit'){
+    const di=S.editId;
+    if(!DOGS[di])return;
+    DOGS[di].name=document.getElementById('mf-dname')?.value||DOGS[di].name;
+    DOGS[di].breed=document.getElementById('mf-dbreed')?.value||'';
+    DOGS[di].age=document.getElementById('mf-dage')?.value||'';
+    DOGS[di].weight=document.getElementById('mf-dweight')?.value||'';
+    localStorage.setItem('pawpack_dogs',JSON.stringify(DOGS));
+    closeModal();renderAll();return;
+  }
   const type=S.modalType;
   const data={};
   (FIELDS[type]||[]).forEach(f=>{const el=document.getElementById('mf-'+f);if(el)data[f]=el.value;});
   closeModal();
-
   if(S.editId!==null){
-    // If it's a group entry being edited, split into individual entries
-    const orig=S.entries.find(e=>e.id===S.editId);
-    if(orig&&orig.dogs.length>1&&S.modalDogs.length===1){
-      // Editing one dog's copy — update just that dog
-      const idx=S.entries.findIndex(e=>e.id===S.editId);
-      if(idx>-1){S.entries[idx].data=data;S.entries[idx].dogs=[...S.modalDogs];await updateEntry(S.entries[idx]);}
-    } else {
-      const idx=S.entries.findIndex(e=>e.id===S.editId);
-      if(idx>-1){S.entries[idx].data=data;S.entries[idx].dogs=[...S.modalDogs];await updateEntry(S.entries[idx]);}
-    }
+    const idx=S.entries.findIndex(e=>e.id===S.editId);
+    if(idx>-1){S.entries[idx].data=data;S.entries[idx].dogs=[...S.modalDogs];await updateEntryDB(S.entries[idx]);}
   } else {
-    // Split into individual entries per dog
     for(const di of S.modalDogs){
       const entry={id:Date.now()+di,type,dogs:[di],ts:new Date().toISOString(),data:{...data}};
       S.entries.unshift(entry);
@@ -980,23 +1052,36 @@ async function saveEntry(){
   renderAll();
 }
 
-function askDel(id){S.pendingDel=id;document.getElementById('confirm').style.display='flex'}
-function closeConfirm(){S.pendingDel=null;document.getElementById('confirm').style.display='none'}
-async function confirmDelete(){
-  const id=S.pendingDel;
-  S.entries=S.entries.filter(e=>e.id!==id);
+function askDel(id){
+  S.pendingAction={type:'deleteEntry',id};
+  document.getElementById('confirm-title').textContent=t('deleteQ');
+  document.getElementById('confirm-sub').textContent=t('deleteWarn');
+  document.getElementById('confirm-btn').textContent=t('delete');
+  document.getElementById('confirm').style.display='flex';
+}
+function closeConfirm(){S.pendingAction=null;document.getElementById('confirm').style.display='none'}
+async function confirmAction(){
+  const action=S.pendingAction;
   closeConfirm();
-  localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
-  await deleteEntryDB(id);
+  if(!action)return;
+  if(action.type==='deleteEntry'){
+    S.entries=S.entries.filter(e=>e.id!==action.id);
+    localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
+    await deleteEntryDB(action.id);
+  } else if(action.type==='clearData'){
+    S.entries=[];
+    localStorage.setItem('pawpack_entries','[]');
+    try{await fetch(API,{method:'DELETE',headers:SBH});}catch(e){}
+  }
   renderAll();
 }
 
 // ---- INIT ----
-document.getElementById('lang-btn').textContent=lang==='en'?'ES':'EN';
 (async()=>{
   await loadFromSupabase();
   document.getElementById('loading').style.display='none';
-  if(!S.schedule){
+  if(!DOGS.length||!S.schedule){
+    obStep=1;obDogs=[{name:''}];obLang=lang;
     renderOnboarding();
   } else {
     document.getElementById('app').style.display='block';
