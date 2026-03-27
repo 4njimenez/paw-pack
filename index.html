@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Paw Pack">
 <title>Paw Pack</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -167,6 +168,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 </style>
 </head>
 <body>
+<div id="auth-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:400;overflow-y:auto">
+  <div style="max-width:400px;margin:0 auto;padding:60px 24px 40px">
+    <div style="text-align:center;margin-bottom:40px">
+      <h1 style="font-family:DM Serif Display,serif;font-size:36px;font-weight:400;color:var(--text)">Paw Pack</h1>
+      <p style="font-size:14px;color:var(--text2);margin-top:8px">Your dog care companion</p>
+    </div>
+    <div id="auth-tabs" style="display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden">
+      <button id="tab-login" onclick="showAuthTab('login')" style="flex:1;padding:10px;border:none;background:var(--text);color:#fff;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;cursor:pointer">Sign in</button>
+      <button id="tab-signup" onclick="showAuthTab('signup')" style="flex:1;padding:10px;border:none;background:transparent;color:var(--text2);font-family:DM Sans,sans-serif;font-size:14px;cursor:pointer">Create account</button>
+    </div>
+    <div id="auth-error" style="display:none;background:var(--red-bg);border:1px solid var(--red);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--red-text);margin-bottom:14px"></div>
+    <div>
+      <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">Email</label>
+      <input id="auth-email" type="email" placeholder="you@example.com" style="width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 12px;background:var(--bg);color:var(--text);font-family:DM Sans,sans-serif;margin-bottom:12px">
+      <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">Password</label>
+      <input id="auth-password" type="password" placeholder="Min. 6 characters" style="width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 12px;background:var(--bg);color:var(--text);font-family:DM Sans,sans-serif;margin-bottom:6px">
+      <div id="auth-signup-extra" style="display:none;margin-top:12px">
+        <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px">Pack name</label>
+        <input id="auth-packname" type="text" placeholder="e.g. The Johnson Pack" style="width:100%;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 12px;background:var(--bg);color:var(--text);font-family:DM Sans,sans-serif">
+        <p style="font-size:12px;color:var(--text3);margin-top:6px">This is the name shown at the top of your app.</p>
+      </div>
+      <button id="auth-submit" onclick="submitAuth()" style="width:100%;margin-top:20px;padding:13px;border:none;border-radius:var(--radius-sm);background:var(--accent);color:#fff;font-size:15px;font-weight:500;font-family:DM Sans,sans-serif;cursor:pointer">Sign in</button>
+      <button id="auth-forgot" onclick="forgotPassword()" style="width:100%;margin-top:10px;padding:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-family:DM Sans,sans-serif;cursor:pointer;text-decoration:underline">Forgot password?</button>
+    </div>
+  </div>
+</div>
 <div class="loading-screen" id="loading">
   <h2>Paw Pack</h2>
   <div class="spinner"></div>
@@ -174,7 +201,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 <div id="onboard-screen" style="display:none;background:var(--bg);position:fixed;inset:0;overflow-y:auto;z-index:200"></div>
 <div class="app" id="app" style="display:none">
   <div class="header">
-    <h1>Paw Pack</h1>
+    <div><h1>Paw Pack</h1><div id='pack-name-sub' style='font-size:11px;color:var(--text3);margin-top:-2px'></div></div>
     <div class="header-right">
       <div class="sync-dot" id="sync-dot"></div>
     </div>
@@ -220,8 +247,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 <script>
 const SUPABASE_URL='https://ffxgxhuemkcekbstkiwn.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmeGd4aHVlbWtjZWtic3RraXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODY5MjIsImV4cCI6MjA5MDA2MjkyMn0.q4zX3NheBQmKka7FaKuTeAGGoMiMPb5y9oqRG8DIKO0';
-const API=`${SUPABASE_URL}/rest/v1/entries`;
-const SBH={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`};
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null;
 
 const DOG_COLORS=['var(--accent)','var(--green)','var(--blue)','var(--pink)'];
 const DOG_BG=['var(--accent-bg)','var(--green-bg)','var(--blue-bg)','var(--pink-bg)'];
@@ -334,6 +361,7 @@ function todayLocal(){const d=new Date();return d.getFullYear()+'-'+String(d.get
 
 let S={
   view:'home',dogView:null,dogTab:'overview',
+  packName:null,
   modalType:null,modalDogs:[0],editId:null,
   pendingAction:null,
   calYear:new Date().getFullYear(),calMonth:new Date().getMonth(),calSelected:null,
@@ -369,11 +397,12 @@ function setSyncDot(s){
 }
 
 async function loadFromSupabase(){
+  if(!currentUser)return;
   setSyncDot('syncing');
   try{
-    const r=await fetch(API+'?order=ts.desc&limit=1000',{headers:{...SBH,'Prefer':'return=representation'}});
-    if(!r.ok)throw new Error();
-    S.entries=await r.json();
+    const {data,error}=await sb.from('entries').select('*').eq('user_id',currentUser.id).order('ts',{ascending:false}).limit(1000);
+    if(error)throw error;
+    S.entries=data||[];
     localStorage.setItem('pawpack_entries',JSON.stringify(S.entries));
     setSyncDot('synced');
   }catch(e){
@@ -383,19 +412,45 @@ async function loadFromSupabase(){
   }
 }
 async function pushEntry(entry){
+  if(!currentUser)return;
   setSyncDot('syncing');
-  try{await fetch(API,{method:'POST',headers:{...SBH,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(entry)});setSyncDot('synced');}
-  catch(e){setSyncDot('error')}
+  try{
+    await sb.from('entries').upsert({...entry,user_id:currentUser.id});
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
 }
 async function updateEntryDB(entry){
+  if(!currentUser)return;
   setSyncDot('syncing');
-  try{await fetch(API+`?id=eq.${entry.id}`,{method:'PATCH',headers:{...SBH},body:JSON.stringify({dogs:entry.dogs,data:entry.data})});setSyncDot('synced');}
-  catch(e){setSyncDot('error')}
+  try{
+    await sb.from('entries').update({dogs:entry.dogs,data:entry.data}).eq('id',entry.id).eq('user_id',currentUser.id);
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
 }
 async function deleteEntryDB(id){
+  if(!currentUser)return;
   setSyncDot('syncing');
-  try{await fetch(API+`?id=eq.${id}`,{method:'DELETE',headers:SBH});setSyncDot('synced');}
-  catch(e){setSyncDot('error')}
+  try{
+    await sb.from('entries').delete().eq('id',id).eq('user_id',currentUser.id);
+    setSyncDot('synced');
+  }catch(e){setSyncDot('error')}
+}
+async function loadProfile(){
+  if(!currentUser)return;
+  try{
+    const {data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+    if(data){
+      if(data.dogs){DOGS=data.dogs;localStorage.setItem('pawpack_dogs',JSON.stringify(DOGS));}
+      if(data.schedule){S.schedule=data.schedule;localStorage.setItem('pawpack_schedule',JSON.stringify(S.schedule));}
+      if(data.pack_name){S.packName=data.pack_name;}
+    }
+  }catch(e){}
+}
+async function saveProfile(){
+  if(!currentUser)return;
+  try{
+    await sb.from('profiles').upsert({id:currentUser.id,pack_name:S.packName||'My Pack',dogs:DOGS,schedule:S.schedule});
+  }catch(e){}
 }
 
 function getMedStatus(e){
@@ -779,6 +834,7 @@ function renderSettings(){
         <div class="settings-section-title">${t('dataManagement')}</div>
         <button class="btn-secondary" onclick="exportCSV()">${t('exportCSV')}</button>
         <button class="btn-danger" onclick="askClearData()">${t('clearData')}</button>
+        <button class="btn-secondary" style="margin-top:8px" onclick="signOut()">${lang==='es'?'Cerrar sesión':'Sign out'}</button>
       </div>
     </div>`;
 }
@@ -803,6 +859,7 @@ function saveSchedule(){
   });
   S.schedule=sc;
   localStorage.setItem('pawpack_schedule',JSON.stringify(sc));
+  await saveProfile();
   const btn=document.querySelector('[onclick="saveSchedule()"]');
   if(btn){btn.textContent='✓ '+t('saveSettings');setTimeout(()=>{btn.textContent=t('saveSettings')},1500);}
 }
@@ -985,6 +1042,7 @@ function renderAll(){
   const mc=document.getElementById('main-content');
   if(!mc)return;
   document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(T[lang][k])el.textContent=T[lang][k];});
+  const pn=document.getElementById('pack-name-sub');if(pn&&S.packName)pn.textContent=S.packName;
   if(S.dogView!==null){mc.innerHTML=renderDogProfile(S.dogView);return;}
   if(S.view==='home')mc.innerHTML=renderHome();
   else if(S.view==='dogs')mc.innerHTML=renderDogsList();
@@ -1039,6 +1097,7 @@ async function saveEntry(){
     DOGS[di].ageMonths=document.getElementById('mf-dagemonths')?.value||'';
     DOGS[di].weight=document.getElementById('mf-dweight')?.value||'';
     localStorage.setItem('pawpack_dogs',JSON.stringify(DOGS));
+    await saveProfile();
     closeModal();renderAll();return;
   }
   const type=S.modalType;
@@ -1078,21 +1137,95 @@ async function confirmAction(){
   } else if(action.type==='clearData'){
     S.entries=[];
     localStorage.setItem('pawpack_entries','[]');
-    try{await fetch(API,{method:'DELETE',headers:SBH});}catch(e){}
+    try{await sb.from('entries').delete().eq('user_id',currentUser.id);}catch(e){}
   }
   renderAll();
 }
 
+// ---- AUTH UI ----
+let currentAuthTab='login';
+function showAuthTab(tab){
+  currentAuthTab=tab;
+  document.getElementById('tab-login').style.background=tab==='login'?'var(--text)':'transparent';
+  document.getElementById('tab-login').style.color=tab==='login'?'#fff':'var(--text2)';
+  document.getElementById('tab-signup').style.background=tab==='signup'?'var(--text)':'transparent';
+  document.getElementById('tab-signup').style.color=tab==='signup'?'#fff':'var(--text2)';
+  document.getElementById('auth-signup-extra').style.display=tab==='signup'?'block':'none';
+  document.getElementById('auth-submit').textContent=tab==='login'?'Sign in':'Create account';
+  document.getElementById('auth-forgot').style.display=tab==='login'?'block':'none';
+  document.getElementById('auth-error').style.display='none';
+}
+function showAuthError(msg){
+  const el=document.getElementById('auth-error');
+  el.textContent=msg;el.style.display='block';
+}
+async function submitAuth(){
+  const email=document.getElementById('auth-email').value.trim();
+  const password=document.getElementById('auth-password').value;
+  const btn=document.getElementById('auth-submit');
+  if(!email||!password){showAuthError('Please enter your email and password.');return;}
+  btn.textContent='...';btn.disabled=true;
+  document.getElementById('auth-error').style.display='none';
+  try{
+    if(currentAuthTab==='login'){
+      const {data,error}=await sb.auth.signInWithPassword({email,password});
+      if(error)throw error;
+    } else {
+      const packName=document.getElementById('auth-packname').value.trim()||'My Pack';
+      const {data,error}=await sb.auth.signUp({email,password});
+      if(error)throw error;
+      S.packName=packName;
+    }
+  }catch(e){
+    showAuthError(e.message||'Something went wrong. Please try again.');
+    btn.textContent=currentAuthTab==='login'?'Sign in':'Create account';
+    btn.disabled=false;
+  }
+}
+async function forgotPassword(){
+  const email=document.getElementById('auth-email').value.trim();
+  if(!email){showAuthError('Enter your email address first.');return;}
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});
+  if(error)showAuthError(error.message);
+  else{document.getElementById('auth-error').style.background='var(--green-bg)';document.getElementById('auth-error').style.color='var(--green-text)';document.getElementById('auth-error').style.borderColor='var(--green)';document.getElementById('auth-error').textContent='Check your email for a password reset link.';document.getElementById('auth-error').style.display='block';}
+}
+function signOut(){
+  sb.auth.signOut();
+  currentUser=null;
+  S.entries=[];DOGS=[];S.schedule=null;S.packName=null;
+  localStorage.clear();
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth-screen').style.display='block';
+  showAuthTab('login');
+}
+
 // ---- INIT ----
 (async()=>{
-  await loadFromSupabase();
-  document.getElementById('loading').style.display='none';
-  if(!DOGS.length||!S.schedule){
-    obStep=1;obDogs=[{name:''}];obLang=lang;
-    renderOnboarding();
-  } else {
-    document.getElementById('app').style.display='block';
-    renderAll();
+  sb.auth.onAuthStateChange(async(event,session)=>{
+    const user=session?.user||null;
+    if(user&&!currentUser){
+      currentUser=user;
+      document.getElementById('loading').style.display='flex';
+      document.getElementById('auth-screen').style.display='none';
+      await loadProfile();
+      await loadFromSupabase();
+      document.getElementById('loading').style.display='none';
+      if(!DOGS.length||!S.schedule){
+        obStep=1;obDogs=[{name:''}];obLang=lang;
+        renderOnboarding();
+      } else {
+        document.getElementById('app').style.display='block';
+        renderAll();
+      }
+    } else if(!user&&currentUser){
+      signOut();
+    }
+  });
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('auth-screen').style.display='block';
+    showAuthTab('login');
   }
 })();
 </script>
