@@ -841,7 +841,7 @@ function renderSettings(){
 
 function setLang(l){lang=l;localStorage.setItem('pawpack_lang',l);renderAll()}
 
-function saveSchedule(){
+async function saveSchedule(){
   const sc={};
   DOGS.forEach((dog,di)=>{
     const meals=document.getElementById(`sc-meals-${di}`)?.value;
@@ -1204,17 +1204,17 @@ function showLoading(v){document.getElementById('loading').style.display=v?'flex
 function showAuth(){showLoading(false);document.getElementById('auth-screen').style.display='block';showAuthTab('login');}
 function showApp(){showLoading(false);document.getElementById('app').style.display='block';renderAll();}
 
-(async()=>{
+function initApp(){
   try{
-    sb.auth.onAuthStateChange(async(event,session)=>{
-      try{
-        const user=session?.user||null;
-        if(user&&!currentUser){
-          currentUser=user;
-          showLoading(true);
-          document.getElementById('auth-screen').style.display='none';
-          await loadProfile();
-          await loadFromSupabase();
+    sb.auth.onAuthStateChange(function(event,session){
+      var user=session?session.user:null;
+      if(user&&!currentUser){
+        currentUser=user;
+        showLoading(true);
+        document.getElementById('auth-screen').style.display='none';
+        loadProfile().then(function(){
+          return loadFromSupabase();
+        }).then(function(){
           showLoading(false);
           if(!DOGS.length||!S.schedule){
             obStep=1;obDogs=[{name:''}];obLang=lang;
@@ -1222,20 +1222,31 @@ function showApp(){showLoading(false);document.getElementById('app').style.displ
           } else {
             showApp();
           }
-        } else if(!user&&currentUser){
-          signOut();
-        }
-      }catch(e){console.error('Auth state error:',e);showAuth();}
+        }).catch(function(e){
+          console.error('Load error:',e);
+          showLoading(false);
+          showApp();
+        });
+      } else if(!user&&currentUser){
+        signOut();
+      }
     });
-    const {data,error}=await sb.auth.getSession();
-    if(error||!data.session){
+    sb.auth.getSession().then(function(result){
+      var session=result.data?result.data.session:null;
+      if(!session){
+        showAuth();
+      }
+    }).catch(function(e){
+      console.error('getSession error:',e);
       showAuth();
-    }
+    });
   }catch(e){
     console.error('Init error:',e);
     showAuth();
   }
-})();
+}
+
+initApp();
 </script>
 </body>
 </html>
