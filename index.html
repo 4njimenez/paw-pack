@@ -267,7 +267,7 @@ const T={
     clearDataQ:'Clear all data?',clearDataWarn:'This will permanently delete all logged entries. Dog profiles and schedules are kept.',
     mealsPerDay:'Meals per day',groomEvery:'Bath — every',analEvery:'Anal glands — every',
     saveSettings:'Save',
-    breed:'Breed',age:'Age (years)',weight:'Weight (kg)',
+    breed:'Breed',ageYears:'Age (years)',ageMonths:'Age (months)',weight:'Weight (kg)',
     nDays:'days',nWeeks:'weeks',nMonth:'month',
     obStep1Title:'Welcome to Paw Pack!',obStep1Sub:'First, choose your language.',
     obStep2Title:'Add your dogs',obStep2Sub:'Add each dog in your pack. You can edit these later.',
@@ -303,7 +303,7 @@ const T={
     clearDataQ:'¿Borrar todos los datos?',clearDataWarn:'Esto eliminará permanentemente todas las entradas. Los perfiles y rutinas se conservan.',
     mealsPerDay:'Comidas por día',groomEvery:'Baño — cada',analEvery:'Glándulas — cada',
     saveSettings:'Guardar',
-    breed:'Raza',age:'Edad (años)',weight:'Peso (kg)',
+    breed:'Raza',ageYears:'Edad (años)',ageMonths:'Edad (meses)',weight:'Peso (kg)',
     nDays:'días',nWeeks:'semanas',nMonth:'mes',
     obStep1Title:'¡Bienvenido a Paw Pack!',obStep1Sub:'Primero, elige tu idioma.',
     obStep2Title:'Agrega tus perros',obStep2Sub:'Agrega cada perro de tu manada. Puedes editarlos después.',
@@ -330,6 +330,8 @@ const FIELDS={
 let lang=localStorage.getItem('pawpack_lang')||'en';
 let DOGS=JSON.parse(localStorage.getItem('pawpack_dogs')||'null')||[];
 
+function todayLocal(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+
 let S={
   view:'home',dogView:null,dogTab:'overview',
   modalType:null,modalDogs:[0],editId:null,
@@ -338,11 +340,12 @@ let S={
   punIdx:Math.floor(Math.random()*PUNS.length),
   entries:[],
   schedule:JSON.parse(localStorage.getItem('pawpack_schedule')||'null'),
-  tasks:JSON.parse(localStorage.getItem('pawpack_tasks_'+todayISO())||'{}')
+  tasks:JSON.parse(localStorage.getItem('pawpack_tasks_'+todayLocal())||'{}')
 };
 
 function t(k){return T[lang][k]||k}
-function todayISO(){return new Date().toISOString().slice(0,10)}
+function todayLocal(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function todayISO(){return todayLocal()}
 function dogInitials(name){return name?name.slice(0,2).toUpperCase():'??'}
 
 function fmtDate(iso){
@@ -605,7 +608,7 @@ function renderDogProfile(di){
       <div class="profile-av" style="background:${DOG_BG[di%4]};color:${DOG_TEXT[di%4]}">${dogInitials(dog.name)}</div>
       <div>
         <div class="profile-name">${dog.name}</div>
-        <div class="profile-sub">${dog.breed||''}${dog.age?' · '+dog.age+' yr':''}${dog.weight?' · '+dog.weight+' kg':''}</div>
+        <div class="profile-sub">${dog.breed||''}${(dog.ageYears||dog.ageMonths)?(' · '+(dog.ageYears?dog.ageYears+'yr ':'')+( dog.ageMonths?dog.ageMonths+'mo':'')):''} ${dog.weight?'· '+dog.weight+' kg':''}</div>
       </div>
     </div>
     ${alerts}
@@ -721,7 +724,7 @@ function renderSettings(){
               <div style="width:32px;height:32px;border-radius:50%;background:${DOG_BG[di%4]};color:${DOG_TEXT[di%4]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${dogInitials(dog.name)}</div>
               <div>
                 <div class="settings-row-label" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">${dog.name}</div>
-                <div style="font-size:12px;color:var(--text2)">${dog.breed||''}${dog.age?' · '+dog.age+' yr':''}${dog.weight?' · '+dog.weight+' kg':''}</div>
+                <div style="font-size:12px;color:var(--text2)">${dog.breed||''}${(dog.ageYears||dog.ageMonths)?(' · '+(dog.ageYears?dog.ageYears+'yr ':'')+( dog.ageMonths?dog.ageMonths+'mo':'')):''} ${dog.weight?'· '+dog.weight+' kg':''}</div>
               </div>
             </div>
             <div style="color:var(--text3)">›</div>
@@ -811,7 +814,10 @@ function openDogEdit(di){
   document.getElementById('modal-body').innerHTML=`
     <label>${t('name')}</label><input id="mf-dname" type="text" value="${dog.name||''}">
     <label>${t('breed')}</label><input id="mf-dbreed" type="text" value="${dog.breed||''}" placeholder="${lang==='es'?'ej. Labrador':'e.g. Labrador'}">
-    <label>${t('age')}</label><input id="mf-dage" type="number" min="0" step="0.5" value="${dog.age||''}">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label>${t('ageYears')}</label><input id="mf-dageyears" type="number" min="0" max="25" step="1" value="${dog.ageYears||''}" placeholder="0"></div>
+      <div><label>${t('ageMonths')}</label><input id="mf-dagemonths" type="number" min="0" max="11" step="1" value="${dog.ageMonths||''}" placeholder="0"></div>
+    </div>
     <label>${t('weight')}</label><input id="mf-dweight" type="number" min="0" step="0.1" value="${dog.weight||''}">`;
   document.getElementById('modal').style.display='flex';
 }
@@ -1029,7 +1035,8 @@ async function saveEntry(){
     if(!DOGS[di])return;
     DOGS[di].name=document.getElementById('mf-dname')?.value||DOGS[di].name;
     DOGS[di].breed=document.getElementById('mf-dbreed')?.value||'';
-    DOGS[di].age=document.getElementById('mf-dage')?.value||'';
+    DOGS[di].ageYears=document.getElementById('mf-dageyears')?.value||'';
+    DOGS[di].ageMonths=document.getElementById('mf-dagemonths')?.value||'';
     DOGS[di].weight=document.getElementById('mf-dweight')?.value||'';
     localStorage.setItem('pawpack_dogs',JSON.stringify(DOGS));
     closeModal();renderAll();return;
