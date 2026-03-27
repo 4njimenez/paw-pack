@@ -194,7 +194,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
 </div>
-<div class="loading-screen" id="loading">
+<div class="loading-screen" id="loading" style="display:flex">
   <h2>Paw Pack</h2>
   <div class="spinner"></div>
 </div>
@@ -1200,32 +1200,40 @@ function signOut(){
 }
 
 // ---- INIT ----
+function showLoading(v){document.getElementById('loading').style.display=v?'flex':'none'}
+function showAuth(){showLoading(false);document.getElementById('auth-screen').style.display='block';showAuthTab('login');}
+function showApp(){showLoading(false);document.getElementById('app').style.display='block';renderAll();}
+
 (async()=>{
-  sb.auth.onAuthStateChange(async(event,session)=>{
-    const user=session?.user||null;
-    if(user&&!currentUser){
-      currentUser=user;
-      document.getElementById('loading').style.display='flex';
-      document.getElementById('auth-screen').style.display='none';
-      await loadProfile();
-      await loadFromSupabase();
-      document.getElementById('loading').style.display='none';
-      if(!DOGS.length||!S.schedule){
-        obStep=1;obDogs=[{name:''}];obLang=lang;
-        renderOnboarding();
-      } else {
-        document.getElementById('app').style.display='block';
-        renderAll();
-      }
-    } else if(!user&&currentUser){
-      signOut();
+  try{
+    sb.auth.onAuthStateChange(async(event,session)=>{
+      try{
+        const user=session?.user||null;
+        if(user&&!currentUser){
+          currentUser=user;
+          showLoading(true);
+          document.getElementById('auth-screen').style.display='none';
+          await loadProfile();
+          await loadFromSupabase();
+          showLoading(false);
+          if(!DOGS.length||!S.schedule){
+            obStep=1;obDogs=[{name:''}];obLang=lang;
+            renderOnboarding();
+          } else {
+            showApp();
+          }
+        } else if(!user&&currentUser){
+          signOut();
+        }
+      }catch(e){console.error('Auth state error:',e);showAuth();}
+    });
+    const {data,error}=await sb.auth.getSession();
+    if(error||!data.session){
+      showAuth();
     }
-  });
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){
-    document.getElementById('loading').style.display='none';
-    document.getElementById('auth-screen').style.display='block';
-    showAuthTab('login');
+  }catch(e){
+    console.error('Init error:',e);
+    showAuth();
   }
 })();
 </script>
