@@ -349,7 +349,7 @@ const META={
 };
 const FIELDS={
   feed:['amount','notes'],
-  med:['med_name','dose','frequency','start_date','duration_days','notes'],
+  med:['med_name','dose','frequency','repeat_days','start_date','duration_days','notes'],
   groom:['groom_type','notes'],
   vet:['visit_date','reason','vet_name','notes']
 };
@@ -465,8 +465,9 @@ function getMedStatus(e){
   return{active:today<=end&&today>=start,pct,daysLeft,endDate:end.toISOString().slice(0,10)};
 }
 function freqLabel(f){
+  if(!f)return'';
   const map={'1xday':t('oncedaily'),'2xday':t('twicedaily'),'3xday':t('3xdaily'),'4xday':t('4xdaily'),'every_other':t('everyother'),'weekly':t('weekly'),'as_needed':t('asneeded')};
-  return map[f]||f||'';
+  return map[f]||f;
 }
 function entryLabel(type,data){
   if(type==='feed')return data.amount||t('feeding');
@@ -500,9 +501,22 @@ function getTasksDue(){
       tasks.push({key,dogIdx:di,type:'feed',label:`${dog.name} — ${t('feeding')}${meals>1?' #'+(m+1):''}`,done:!!S.tasks[key],showMeta:false});
     }
     S.entries.filter(e=>e.type==='med'&&e.dogs.includes(di)).forEach(e=>{
-      const st=getMedStatus(e);if(!st||!st.active)return;
-      const freq=e.data.frequency;
-      const count=freq==='2xday'?2:freq==='3xday'?3:freq==='4xday'?4:1;
+      const repeatDays=parseInt(e.data.repeat_days)||0;
+      const freq=e.data.frequency||'';
+      // Determine daily count from free text or repeat_days
+      let count=1;
+      if(/3x|three|tres/i.test(freq))count=3;
+      else if(/4x|four|cuatro/i.test(freq))count=4;
+      else if(/2x|twice|dos veces/i.test(freq))count=2;
+      // For multi-day repeat (e.g. every 3 months), only show if due today
+      if(repeatDays>1){
+        // Find last time this med was logged for this dog
+        const lastEntry=S.entries.filter(e2=>e2.type==='med'&&e2.dogs.includes(di)&&e2.data.med_name===e.data.med_name&&e2.id!==e.id).sort((a,b)=>new Date(b.ts)-new Date(a.ts))[0];
+        const daysSince=lastEntry?daysBetween(lastEntry.ts.slice(0,10),todayISO()):repeatDays;
+        if(daysSince<repeatDays)return;
+      }
+      // Check if active (has duration)
+      if(e.data.duration_days){const st=getMedStatus(e);if(!st||!st.active)return;}
       for(let m=0;m<count;m++){
         const key=getTaskKey(di,'med',e.id+'_'+m);
         tasks.push({key,dogIdx:di,type:'med',label:`${dog.name} — ${e.data.med_name||t('medication')}${count>1?' #'+(m+1):''}`,done:!!S.tasks[key],showMeta:false});
@@ -1061,9 +1075,8 @@ function buildBody(type,ex){
     const lbs=[t('bath'),t('analGlands'),t('nailTrim'),t('brush'),t('other')];
     return`<option value="${o}"${d.groom_type===o?' selected':''}>${lbs[i]}</option>`;
   }).join('');
-  const freqOpts=[['1xday',t('oncedaily')],['2xday',t('twicedaily')],['3xday',t('3xdaily')],['4xday',t('4xdaily')],['every_other',t('everyother')],['weekly',t('weekly')],['as_needed',t('asneeded')]].map(([v,l])=>`<option value="${v}"${d.frequency===v?' selected':''}>${l}</option>`).join('');
   if(type==='feed')return ds+`<label>${t('amountLabel')}</label><input id="mf-amount" type="text" value="${d.amount||''}" placeholder="e.g. 1 cup kibble"><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
-  if(type==='med')return ds+`<label>${t('medName')}</label><input id="mf-med_name" type="text" value="${d.med_name||''}"><label>${t('dose')}</label><input id="mf-dose" type="text" value="${d.dose||''}"><label>${t('frequency')}</label><select id="mf-frequency"><option value="">${t('selectFreq')}</option>${freqOpts}</select><div class="freq-row" style="margin-top:12px"><div><label style="margin-top:0">${t('startDate')}</label><input id="mf-start_date" type="date" value="${d.start_date||todayISO()}"></div><div><label style="margin-top:0">${t('durationDays')}</label><input id="mf-duration_days" type="number" min="1" value="${d.duration_days||''}" placeholder="7"></div></div><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
+  if(type==='med')return ds+`<label>${t('medName')}</label><input id="mf-med_name" type="text" value="${d.med_name||''}" placeholder="e.g. Simparica TRIO"><label>${t('dose')}</label><input id="mf-dose" type="text" value="${d.dose||''}" placeholder="e.g. 1 tablet, 2 drops"><label>${t('frequency')}</label><input id="mf-frequency" type="text" value="${d.frequency||''}" placeholder="${lang==='es'?'ej. cada 3 meses, 3 veces al día':'e.g. every 3 months, 3x daily'}"><label>${lang==='es'?'Repetir cada (días)':'Repeat every (days)'} <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">${lang==='es'?'— para tareas automáticas':'— for auto tasks'}</span></label><input id="mf-repeat_days" type="number" min="1" value="${d.repeat_days||''}" placeholder="${lang==='es'?'ej. 90 para cada 3 meses':'e.g. 90 for every 3 months'}"><div class="freq-row" style="margin-top:12px"><div><label style="margin-top:0">${t('startDate')}</label><input id="mf-start_date" type="date" value="${d.start_date||todayISO()}"></div><div><label style="margin-top:0">${t('durationDays')}</label><input id="mf-duration_days" type="number" min="1" value="${d.duration_days||''}" placeholder="7"></div></div><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
   if(type==='groom')return ds+`<label>${t('groomType')}</label><select id="mf-groom_type"><option value="">${t('selectType')}</option>${groomOpts}</select><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
   if(type==='vet')return ds+`<label>${t('visitDate')}</label><input id="mf-visit_date" type="date" value="${d.visit_date||todayISO()}"><label>${t('reason')}</label><input id="mf-reason" type="text" value="${d.reason||''}"><label>${t('vetName')}</label><input id="mf-vet_name" type="text" value="${d.vet_name||''}"><label>${t('notesLabel')}</label><textarea id="mf-notes">${d.notes||''}</textarea>`;
   return ds;
