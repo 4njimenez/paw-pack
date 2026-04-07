@@ -503,20 +503,21 @@ function getTasksDue(){
     S.entries.filter(e=>e.type==='med'&&e.dogs.includes(di)).forEach(e=>{
       const repeatDays=parseInt(e.data.repeat_days)||0;
       const freq=e.data.frequency||'';
-      // Determine daily count from free text or repeat_days
-      let count=1;
-      if(/3x|three|tres/i.test(freq))count=3;
-      else if(/4x|four|cuatro/i.test(freq))count=4;
-      else if(/2x|twice|dos veces/i.test(freq))count=2;
-      // For multi-day repeat (e.g. every 3 months), only show if due today
+      // Only generate tasks if med has an active duration OR a repeat_days value
+      if(!e.data.duration_days&&!repeatDays) return;
+      // If it has a duration, check it's still active
+      if(e.data.duration_days){const st=getMedStatus(e);if(!st||!st.active)return;}
+      // If it has repeat_days, check if it's due today
       if(repeatDays>1){
-        // Find last time this med was logged for this dog
         const lastEntry=S.entries.filter(e2=>e2.type==='med'&&e2.dogs.includes(di)&&e2.data.med_name===e.data.med_name&&e2.id!==e.id).sort((a,b)=>new Date(b.ts)-new Date(a.ts))[0];
         const daysSince=lastEntry?daysBetween(lastEntry.ts.slice(0,10),todayISO()):repeatDays;
         if(daysSince<repeatDays)return;
       }
-      // Check if active (has duration)
-      if(e.data.duration_days){const st=getMedStatus(e);if(!st||!st.active)return;}
+      // Determine daily count from free text
+      let count=1;
+      if(/3x|three|tres/i.test(freq))count=3;
+      else if(/4x|four|cuatro/i.test(freq))count=4;
+      else if(/2x|twice|dos veces/i.test(freq))count=2;
       for(let m=0;m<count;m++){
         const key=getTaskKey(di,'med',e.id+'_'+m);
         tasks.push({key,dogIdx:di,type:'med',label:`${dog.name} — ${e.data.med_name||t('medication')}${count>1?' #'+(m+1):''}`,done:!!S.tasks[key],showMeta:false});
